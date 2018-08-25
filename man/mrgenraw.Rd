@@ -16,5 +16,5 @@ Numeric format of raw genotype dataset.
 Dataset input of raw genotype for mrMLM function. 
 }
 \author{
- Maintainer: Yuanming Zhang<soyzhang@mail.hzau.edu.cn>
+ Maintainer: Yuan-Ming Zhang<soyzhang@mail.hzau.edu.cn>
 }

@@ -20,13 +20,13 @@ ISIS(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO)
       	}
 \author{
 Zhang Ya-Wen, Li Pei, Ren Wen-Long, Ni Yuan-Li, Zhang Yuan-Ming\cr
-Maintainer: Yuanming Zhang<soyzhang@mail.hzau.edu.cn>
+Maintainer: Yuan-Ming Zhang<soyzhang@mail.hzau.edu.cn>
 }
 \examples{
 G1=data(mrgen)
 P1=data(mrphe)
 G2=data(mrgenraw)
-ISIS(mrgen,mrphe,outATCG=NULL,mrgenraw,kk=NULL,psmatrix=NULL,
+result=ISIS(mrgen,mrphe,outATCG=NULL,mrgenraw,kk=NULL,psmatrix=NULL,
 0.01,3,1,CLO=1)
 }
 
