@@ -19,7 +19,7 @@ ISIS(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO)
       \item{CLO}{number of CPU.}
       	}
 \author{
-Zhang Ya-Wen, Li Pei, Ren Wen-Long, Ni Yuan-Li, Zhang Yuan-Ming\cr
+Zhang Ya-Wen, Li Pei, and Zhang Yuan-Ming\cr
 Maintainer: Yuan-Ming Zhang<soyzhang@mail.hzau.edu.cn>
 }
 \examples{
@@ -29,6 +29,3 @@ G2=data(mrgenraw)
 result=ISIS(mrgen,mrphe,outATCG=NULL,mrgenraw,kk=NULL,psmatrix=NULL,
 0.01,3,1,CLO=1)
 }
-
-
-

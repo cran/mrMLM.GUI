@@ -20,7 +20,7 @@ pLARmEB(gen,phe,outATCG,genRaw,kk,psmatrix,CriLOD,lars1,Genformat,Bootstrap,CLO)
      \item{CLO}{number of CPU.}
       }
 \author{
-Zhang Ya-Wen, Li Pei, Ren Wen-Long, Ni Yuan-Li, Zhang Yuan-Ming\cr
+Zhang Ya-Wen, Li Pei, and Zhang Yuan-Ming\cr
 Maintainer: Yuan-Ming Zhang<soyzhang@mail.hzau.edu.cn>
 }
 \examples{
@@ -28,6 +28,5 @@ G1=data(mrgen)
 P1=data(mrphe)
 G2=data(mrgenraw)
 result=pLARmEB(mrgen,mrphe,outATCG=NULL,mrgenraw,kk=NULL,psmatrix=NULL,
-3,50,1,Bootstrap=FALSE,CLO=1)
+3,20,1,Bootstrap=FALSE,CLO=1)
 }
-

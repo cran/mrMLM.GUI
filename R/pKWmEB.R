@@ -1,16 +1,11 @@
 pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
   
-  if(is.null(CLO)==FALSE){
-    OUT<-list(gen=gen,phe=phe)  
-    return(OUT)  
-  }else{
-    
     inputform<-Genformat
     
     if(is.null(kk)){
       if(is.null(gen)==TRUE)
       {
-        warning("Please input correct genotypic dataset !")
+        showModal(modalDialog(title = "Warning", strong("Please input correct genotypic dataset !"), easyClose = TRUE))
       }else{
         envgenq<-deepcopy(gen,3:ncol(gen))
         envgenq2<-t(envgenq[,])
@@ -57,37 +52,32 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
     }
     
     
-    if(is.null(svpal)==TRUE||is.null(svmlod)==TRUE){
-      warning("Please set parameter!")
-    }
-    
-    if((svpal<0)||(svpal>1))
-    {
-      warning("Please input critical P-value between 0 and 1!")
-    }
+    if(is.null(svmlod)==TRUE){
+      showModal(modalDialog(title = "Warning", strong("Please set parameter!"), easyClose = TRUE))
+     }
     if(svmlod<0)
     {
-      warning("Please input critical LOD score: > 0 !")
+      showModal(modalDialog(title = "Warning", strong("Please input critical LOD score: > 0 !"), easyClose = TRUE))
     }
     
     if(exists("gen")==FALSE)
     {
-      warning("Please input correct genotypic dataset !")
+      showModal(modalDialog(title = "Warning", strong("Please input correct genotypic dataset !"), easyClose = TRUE))
     }
     if(exists("phe")==FALSE)
     {
-      warning("Please input correct phenotypic dataset !")
+      showModal(modalDialog(title = "Warning", strong("Please input correct phenotypic dataset !"), easyClose = TRUE))
     }
     if(exists("kk")==FALSE)
     {
-      warning("Please input correct kinship (K) dataset !")
+      showModal(modalDialog(title = "Warning", strong("Please input correct kinship (K) dataset !"), easyClose = TRUE))
     }
     if((exists("gen")==TRUE)&&(exists("phe")==TRUE)&&(ncol(gen)!=(nrow(phe)+2)))
     {
-      warning("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset !")
+      showModal(modalDialog(title = "Warning", strong("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset !"), easyClose = TRUE))
     }
     
-    if((exists("gen")==TRUE)&&(exists("phe")==TRUE)&&(exists("kk")==TRUE)&&((ncol(gen)==(nrow(phe)+2)))&&(svpal>=0)&&(svpal<=1)&&(svmlod>=0))
+    if((exists("gen")==TRUE)&&(exists("phe")==TRUE)&&(exists("kk")==TRUE)&&((ncol(gen)==(nrow(phe)+2)))&&(svmlod>=0))
     {
       multinormal<-function(y,mean,sigma)
       {
@@ -177,7 +167,7 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
           stderr<-sqrt(s[i]+1e-20)
           t<-abs(u[i])/stderr
           f<-t*t
-          p<-1-pchisq(f,1)
+          p<-pchisq(f,1,lower.tail = F)
           wang[i]<-p
         }
         
@@ -956,7 +946,7 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
         tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
         kong<-matrix("",nrow(tempparms),1)
         parmsShow<-data.frame(genRaw[-1,1],gen[,1:2],kong,tempparms,genRaw[-1,4])
-        colnames(parmsShow)<-c("RS#","Chromosome","Marker Position (bp)","SNP effect","-log10(P)","Genotype for code 1")
+        colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
         
       }
       if(inputform==2){
@@ -968,21 +958,21 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
         tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
         kong<-matrix("",nrow(tempparms),1)
         parmsShow<-data.frame(genRaw[-1,1],gen[,1:2],kong,tempparms,outATCG)
-        colnames(parmsShow)<-c("RS#","Chromosome","Marker Position (bp)","SNP effect","-log10(P)","Genotype  for code 1")
+        colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
         
       }
       if(inputform==3){
         #output result1 using TASSEL format
         parmsShow<-as.matrix(-log10(pvaluetotal[,2]))
         outATCG<-matrix(outATCG,,1)
-        outATCG<-unlist(strsplit(outATCG,""))
-        outATCG<-matrix(outATCG[c(TRUE,FALSE)],,1)
+        #outATCG<-unlist(strsplit(outATCG,""))
+        #outATCG<-matrix(outATCG[c(TRUE,FALSE)],,1)
         tempparms<-parmsShow
         tempparms[which(abs(tempparms)>=1e-4)]<-round(tempparms[which(abs(tempparms)>=1e-4)],4)
         tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
         kong<-matrix("",nrow(tempparms),1)
         parmsShow<-data.frame(genRaw[-1,1],gen[,1:2],kong,tempparms,outATCG)
-        colnames(parmsShow)<-c("RS#","Chromosome","Marker Position (bp)","SNP effect","-log10(P)","Genotype  for code 1")
+        colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
       }
       
       parms.pchange<-as.matrix(pvaluetotal[,2])
@@ -995,7 +985,7 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
       }else{
         parms.pchange<-parmsp
       }
-      colnames(parms.pchange)<-"p-value"
+      colnames(parms.pchange)<-"P-value"
       
       bpnumber <- numeric()
       chrnum <- unique(gen[,1])
@@ -1009,20 +999,23 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
       parmstemp <- parmsShow[,-4]
       parmstemp[,4] <-parms.pchange
       parms <- data.frame(parmstemp,snpname,bpnumber)
-      colnames(parms)<-c("RS#","Chromosome","Marker Position (bp)","P-value","Genotype  for code 1","SNPname","BPnumber")
+      colnames(parms)<-c("RS#","Chromosome","Marker position (bp)","P-value","Genotype for code 1","SNPname","BPnumber")
       parms<-parms[,-c(1,3,5)]
       
       mannewp <- as.matrix(0.05/as.numeric(nrow(gen)))
       rowbl<-matrix("",(nrow(parms)-1),1)
       mannepr<-rbind(mannewp,rowbl)
       
-      colnames(mannepr)<-"Manhattan p-value"
+      colnames(mannepr)<-"Manhattan P-value"
       
       parmsm<-cbind(as.matrix(parms),mannepr)
       parmsm<-as.data.frame(parmsm,stringsAsFactors=FALSE)
       parmsm[,c(1,2,4)]<-sapply(parmsm[,c(1,2,4)],as.numeric)
       
       finalres <- gglartotal
+      
+     if(length(finalres)!=0){
+      
       if(length(finalres[,2])>1){
         
         if((flagps==1)||(exists("psmatrix")==FALSE))
@@ -1171,16 +1164,15 @@ pKWmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
       
       tempwan <- wan
       lodscore1 <- as.numeric(tempwan[,5])
-      log10P <- as.matrix(round(-log10(1-pchisq(lodscore1*4.605,1)),4))
+      log10P <- as.matrix(round(-log10(pchisq(lodscore1*4.605,1,lower.tail = F)),4))
       tempwan1 <- cbind(tempwan[,1:5],log10P,tempwan[,6:10])
       wan <- tempwan1
       
-      colnames(wan)<-c("RS#","Chromosome","Marker Position (bp)","QTN effect","LOD score","-log10(P)","r2 (%)","MAF","Genotype  for code 1","Var_Error","Var_Phen(total)")
+      colnames(wan)<-c("RS#","Chromosome","Marker position (bp)","QTN effect","LOD score","'-log10(P)'","r2 (%)","MAF","Genotype for code 1","Var_error","Var_phen (total)")
       wan<-as.data.frame(wan)
-      
+      }#chenge20190125
       output<-list(result1=parmsShow,result2=wan,Manhattan=parmsm,QQ=parms.pchange)
       
       return(output)
     } 
   }
-}

@@ -1,10 +1,5 @@
 pLARmEB<-function(gen,phe,outATCG,genRaw,kk,psmatrix,CriLOD,lars1,Genformat,Bootstrap,CLO){
 
-  if(is.null(CLO)==FALSE){
-    OUT<-list(gen=gen,phe=phe)
-    return(OUT)
-  }else{
-
 lodvalue<-CriLOD
 gene.data<-gen
 
@@ -20,28 +15,27 @@ if(is.null(psmatrix)){
 }
 
 if(is.null(lodvalue)==TRUE||is.null(lars1)==TRUE){
-  warning("Please set parameter!")
+  showModal(modalDialog(title = "Warning", strong("Please set parameter!"), easyClose = TRUE))
 }
 if(lodvalue<0)
 {
-  warning("Please input critical LOD score: > 0 !")
+  showModal(modalDialog(title = "Warning", strong("Please input critical LOD score: > 0 !"), easyClose = TRUE))
 }
 if(lars1<0||lars1>=nrow(phe))
 {
-  warning("Please input the number of most relevant variables select by LARS: >0 and less than numbers of sample!")
+  showModal(modalDialog(title = "Warning", strong("Please input the number of most relevant variables select by LARS: >0 and less than numbers of sample!"), easyClose = TRUE))
 }
 if(is.null(gene.data)==TRUE)
 {
-  warning("Please input correct genotypic data !")
-  
+  showModal(modalDialog(title = "Warning", strong("Please input correct genotypic data !"), easyClose = TRUE))
 }
 if(is.null(phe)==TRUE)
 {
-  warning("Please input correct phenotypic data !")
+  showModal(modalDialog(title = "Warning", strong("Please input correct phenotypic data !"), easyClose = TRUE))
 }
 if((is.null(gene.data)==FALSE)&&(is.null(phe)==FALSE)&&(ncol(gene.data)!=(nrow(phe)+2)))
 {
-  warning("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset !")
+  showModal(modalDialog(title = "Warning", strong("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset !"), easyClose = TRUE))
 }
 
 if((is.null(gene.data)==FALSE)&&(is.null(phe)==FALSE)&&((ncol(gene.data)==(nrow(phe)+2)))&&(lodvalue>=0)&&(lars1>0))
@@ -138,7 +132,7 @@ ebayes_EM<-function(x,z,y)
     stderr<-sqrt(s[i]+1e-20)
     t<-abs(u[i])/stderr
     f<-t*t
-    p<-1-pchisq(f,1)
+    p<-pchisq(f,1,lower.tail = F)
     wang[i]<-p
   }
   
@@ -848,6 +842,28 @@ if(is.null(psmatrix)==FALSE){
   W1<-W.orig
 }
 
+kk<-list(NULL)
+cc<-list(NULL)
+kktotal<-matrix(0,nsam,nsam)
+
+for(i in 1:chrnum){
+  xxot <- as.matrix(gene.data[gene.data[,1]==i,3:ncol(gene.data)])
+  xot <-t(xxot)
+  nmarkot <-ncol(xot)
+  kk[[i]]<-matrix(0,nsam,nsam)
+  for(k in 1:nmarkot)
+  {
+    z<-as.matrix(xot[,k])
+    kk[[i]]<-kk[[i]]+z%*%t(z)
+  }
+  cc[[i]]<-mean(diag(kk[[i]]))
+  
+  kktotal<-kktotal+kk[[i]]
+}
+
+rm(xot)
+gc()
+
 cl.cores <- detectCores()
 if((cl.cores<=2)||(is.null(CLO)==FALSE)){
   cl.cores<-1
@@ -870,26 +886,14 @@ larsres<-foreach(i=1:chrnum,.multicombine=TRUE,.combine='rbind')%dopar%{
   requireNamespace("lars")
   requireNamespace("sampling")
   
+  
   xxot <- as.matrix(gene.dataq[(gene.dataq[,1])!=i,3:ncol(gene.dataq)])
-  xot <-t(xxot)
-
-  nmarkot <-ncol(xot)
-  kk<-matrix(0,nsam,nsam)
-  for(k in 1:nmarkot)
-  {
-    z<-as.matrix(xot[,k])
-    kk<-kk+z%*%t(z)
-  }
-  
-  rm(xot)
-  gc()
-  
-  cc<-mean(diag(kk))
-  K1 <- numeric()
-  K1 <- kk/cc
   
   xx1 <- as.matrix(gene.dataq[gene.dataq[,1]==i,3:ncol(gene.dataq)])
   YY1 <- matrix(Y.data,,1)
+  
+  K1 <- (kktotal-kk[[i]])/(sum(unlist(cc))-as.numeric(cc[i]))
+  
   
   repl<-numeric()
   if(Bootstrap==TRUE){
@@ -926,41 +930,48 @@ larsres<-foreach(i=1:chrnum,.multicombine=TRUE,.combine='rbind')%dopar%{
       
       remle2<-emma.REMLE(YY, W, K, Z=NULL, ngrids=100, llim=-10, ulim=10,esp=1e-10, eig.L = NULL, eig.R = NULL)
       remle1.B1<-emma.maineffects.B(Z=NULL,K,remle2$delta)
+      rm(K)
+      gc()
       C2<-remle1.B1$mC
       Y_c <- C2%*%YY
       W_c <- C2%*%W
       G_c <- C2%*%t(xx)
-      
-      rm(xx)
-      gc()
-      
       GGG <- t(G_c)
+      rm(G_c)
+      gc()
       ylars <- as.matrix(Y_c)
       xlars <- cbind(W_c,t(GGG))
+      rm(GGG)
+      gc()
       LAR <- lars(xlars,ylars,type="lar",use.Gram=F,max.steps=lars1)
+      rm(xlars)
+      gc()
       LAR$beta[nrow(LAR$beta),]
     }
     
   }else if(Bootstrap==FALSE){
-    YY<-YY1
-    xx<-xx1
-    K<-K1
-    W<-W1
+ 
     res1 <- numeric()
-    remle2<-emma.REMLE(YY, W, K, Z=NULL, ngrids=100, llim=-10, ulim=10,esp=1e-10, eig.L = NULL, eig.R = NULL)
-    remle1.B1<-emma.maineffects.B(Z=NULL,K,remle2$delta)
-    C2<-remle1.B1$mC
-    Y_c <- C2%*%YY
-    W_c <- C2%*%W
-    G_c <- C2%*%t(xx)
-    
-    rm(xx)
+    remle2<-emma.REMLE(YY1, W1, K1, Z=NULL, ngrids=100, llim=-10, ulim=10,esp=1e-10, eig.L = NULL, eig.R = NULL)
+    remle1.B1<-emma.maineffects.B(Z=NULL,K1,remle2$delta)
+    rm(K1)
     gc()
-    
+    C2<-remle1.B1$mC
+    Y_c <- C2%*%YY1
+    W_c <- C2%*%W1
+    G_c <- C2%*%t(xx1)
+    rm(xx1)
+    gc()
     GGG <- t(G_c)
+    rm(G_c)
+    gc()
     ylars <- as.matrix(Y_c)
     xlars <- cbind(W_c,t(GGG))
+    rm(GGG)
+    gc()
     LAR <- lars(xlars,ylars,type="lar",use.Gram=F,max.steps=lars1)
+    rm(xlars)
+    gc()
     res1<-cbind(res1,LAR$beta[nrow(LAR$beta),])
   }  
   
@@ -973,7 +984,7 @@ larsres<-foreach(i=1:chrnum,.multicombine=TRUE,.combine='rbind')%dopar%{
 
 stopCluster(cl)
 
-rm(gene.dataq)
+rm(kk,kktotal,gene.dataq)
 gc()
 
 if(Bootstrap==TRUE){
@@ -1224,33 +1235,29 @@ if(length(lodid)!=0){
   wan<-cbind(marker,wan,maf,snp,vees,pees)
   tempwan <- wan
   lodscore1 <- as.numeric(tempwan[,5])
-  log10P <- as.matrix(round(-log10(1-pchisq(lodscore1*4.605,1)),4))
+  log10P <- as.matrix(round(-log10(pchisq(lodscore1*4.605,1,lower.tail = F)),4))
   if(nrow(tempwan)>1){
     tempwan1 <- cbind(tempwan[,1:5],log10P,tempwan[,6:10])
   }else{
     tempwan1 <- cbind(t(as.matrix(tempwan[,1:5])),log10P,t(as.matrix(tempwan[,6:10])))  
   }
   wan <- tempwan1
-  colnames(wan)<-c("RS#","Chromosome","Marker Position (bp)","QTN effect","LOD score","-log10(P)","r2 (%)","MAF","Genotype  for code 1","Var_Error","Var_phen (total)")
+  colnames(wan)<-c("RS#","Chromosome","Marker position (bp)","QTN effect","LOD score","'-log10(P)'","r2 (%)","MAF","Genotype for code 1","Var_error","Var_phen (total)")
   wan<-as.data.frame(wan)
   
   result<-as.data.frame(result)
 }
 
-if(nrow(result)>1){
-  r1<-as.matrix(result[,c(1,2,4)]) 
-}else{
-  r1<-t(as.matrix(result[,c(1,2,4)]))  
-}
-r2<-as.matrix(genname[,1:2])
-rowbl<-nrow(r2)-nrow(r1)
-bl<-matrix("",rowbl,3)
-r12<-rbind(r1,bl)
-result<-cbind(r2,r12)
-
- colnames(result)<-c("Chromosome","Marker Position (bp)","Chromosome(detected)","Marker Position (bp)(detected)","LOD score(detected)")
+if(is.null(result)==FALSE){
+ r1<-as.matrix(result[,c(1,2,4)]) 
+ r2<-as.matrix(genname[,1:2])
+ rowbl<-nrow(r2)-nrow(r1)
+ bl<-matrix("",rowbl,3)
+ r12<-rbind(r1,bl)
+ result<-cbind(r2,r12)
+ colnames(result)<-c("Chromosome","Marker position (bp)","Chromosome (detected)","Marker position (bp) (detected)","LOD score (detected)")
+ }
  output<-list(result=wan,plot=result)
  } 
  return(output) 
- } 
 }

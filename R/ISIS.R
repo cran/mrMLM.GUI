@@ -1,10 +1,5 @@
 ISIS<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,CLO){
 
-if(is.null(CLO)==FALSE){
- OUT<-list(gen=gen,phe=phe)
- return(OUT)
-}else{
-
 pvalue<-svpal
 svlod<-svmlod
 inputform<-Genformat
@@ -19,36 +14,29 @@ y<-phe
 ps<-psmatrix
 
 
-if(is.null(svpal)==TRUE||is.null(svmlod)==TRUE){
-  warning("Please set parameters!")
+if(is.null(svmlod)==TRUE){
+  showModal(modalDialog(title = "Warning", strong("Please set parameters!"), easyClose = TRUE))
 }
 
-if((svpal<0)||(svpal>1))
-{
-  warning("Please input critical P-value between 0 and 1!")
-}
 if(svmlod<0)
 {
-  warning("Please input critical LOD score: > 0 !")
+  showModal(modalDialog(title = "Warning", strong("Please input critical LOD score: > 0 !"), easyClose = TRUE))
 }
 if(is.null(gen)==TRUE)
 {
-  warning("Please input correct genotypic dataset !","Warning",icon="warning")
-  
+  showModal(modalDialog(title = "Warning", strong("Please input correct genotypic dataset !"), easyClose = TRUE))
 }
 if(is.null(y)==TRUE)
 {
-  warning("Please input correct phenotypic dataset !","Warning",icon="warning")
-  
+  showModal(modalDialog(title = "Warning", strong("Please input correct phenotypic dataset !"), easyClose = TRUE))
 }
 
 if((is.null(gen)==FALSE)&&(is.null(y)==FALSE)&&(ncol(gen)!=(nrow(y)+2)))
 {
-  warning("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset!","Error",icon="error")
-  
+  showModal(modalDialog(title = "Warning", strong("Sample size in genotypic dataset doesn't equal to the sample size in phenotypic dataset!"), easyClose = TRUE))
 }
 
-if((is.null(gen)==FALSE)&&(is.null(y)==FALSE)&&((ncol(gen)==(nrow(y)+2)))&&(svpal>=0)&&(svpal<=1)&&(svmlod>=0))
+if((is.null(gen)==FALSE)&&(is.null(y)==FALSE)&&((ncol(gen)==(nrow(y)+2)))&&(svmlod>=0))
 {
 wan<-NULL
 result<-NULL
@@ -141,7 +129,7 @@ ebayes_EM<-function(x,z,y)
     stderr<-sqrt(s[i]+1e-20)
     t<-abs(u[i])/stderr
     f<-t*t
-    p<-1-pchisq(f,1)
+    p<-pchisq(f,1,lower.tail = F)
     wang[i]<-p
   }
   
@@ -532,7 +520,7 @@ if(le1!=0){
           wan<-cbind(marker,wan,maf,snp,vees,pees)
           tempwan <- wan
           lodscore1 <- as.numeric(tempwan[,5])
-          log10P <- as.matrix(round(-log10(1-pchisq(lodscore1*4.605,1)),4))
+          log10P <- as.matrix(round(-log10(pchisq(lodscore1*4.605,1,lower.tail = F)),4))
           
           if(nrow(tempwan)>1){
             tempwan1 <- cbind(tempwan[,1:5],log10P,tempwan[,6:10])
@@ -542,30 +530,28 @@ if(le1!=0){
           
           wan <- tempwan1
           
-          colnames(wan)<-c("RS#","Chromosome","Marker Position (bp)","QTN effect","LOD score","-log10(P)","r2 (%)","MAF","Genotype  for code 1","Var_Error","Var_phen (total)")
+          colnames(wan)<-c("RS#","Chromosome","Marker position (bp)","QTN effect","LOD score","'-log10(P)'","r2 (%)","MAF","Genotype for code 1","Var_error","Var_phen (total)")
         }
       }
     }
   }  
 }
 
+
+if(is.null(result)==FALSE){
 if(nrow(result)>1){
   r1<-as.matrix(result[,c(1,2,4)]) 
 }else{
   r1<-t(as.matrix(result[,c(1,2,4)]))  
 }
 r2<-as.matrix(gen[,1:2])
-
 rowbl<-nrow(r2)-nrow(r1)
 bl<-matrix("",rowbl,3)
 r12<-rbind(r1,bl)
 result<-cbind(r2,r12)
-
-colnames(result)<-c("Chromosome","Marker Position (bp)","Chromosome(detected)","Marker Position (bp)(detected)","LOD score(detected)")
-
-output<-list(result=wan,plot=result)
-
-return(output)
+colnames(result)<-c("Chromosome","Marker position (bp)","Chromosome (detected)","Marker position (bp) (detected)","LOD score (detected)")
 }
+output<-list(result=wan,plot=result)
+return(output)
 }
 }
