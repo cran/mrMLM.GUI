@@ -51,7 +51,8 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
         snps <- snps[rowSums(is.na(snps))==0,]
       }
       n <- ncol(snps)
-      K<-(t(snps)%*%snps+t(1-snps)%*%(1-snps))/nrow(snps)
+      #K<-(t(snps)%*%snps+t(1-snps)%*%(1-snps))/nrow(snps)
+      K<-(mrMLM.GUI::multiplication_speed(t(snps),snps)+mrMLM.GUI::multiplication_speed(t(1-snps),(1-snps)))/nrow(snps)
       diag(K) <- 1
       return(K)
     }
@@ -1019,29 +1020,6 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
     names(parms)<-NULL
     parms<-as.matrix(parms)
     
-    ress<-parms[,1:3]
-    ress1<-ress[ress[,3]!=1,]
-    resp<-as.matrix(ress1[,3])
-    pmin<-min(resp[resp!=0])
-    locsub<-which(resp==0)
-    if(length(locsub)!=0){
-      subvalue<-10^(1.1*log10(pmin))
-      ress1[locsub,3]<-subvalue
-      ress1<-ress1
-    }else{
-      ress1<-ress1
-    }
-    
-    rowsnp <- dim(ress1)[1]
-    snpname <- numeric()
-    snpname<-as.matrix(paste("rs",c(1:rowsnp),sep = ""))
-    snpname<-snpname
-    
-    pe<-as.numeric(parms[,6])
-    pee<-sum(pe)
-    newp<-0.05/pee
-    mannewp<-newp
-   
     parmeter<-parms[,1:4]
     parmeter[,3]<--log10(parmeter[,3])
     parmeter[which(abs(parmeter)>1e-4)]<-round(parmeter[which(abs(parmeter)>1e-4)],4)
@@ -1051,7 +1029,7 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
     if(inputform==1){
       parmsShow<-cbind(genRaw[-1,1],parmeter,genRaw[-1,4])
       parmsShow<-parmsShow[,c(1,2,3,5,4,6)]
-      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
+      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect (FASTmrEMMA)","'-log10(P) (FASTmrEMMA)'","Genotype for code 1")
       
     }
     if(inputform==2){
@@ -1059,7 +1037,7 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
       meadd<-matrix(" ",nrow(parms),1)
       parmsShow<-cbind(genRaw[-1,1],parmeter,outATCG)
       parmsShow<-parmsShow[,c(1,2,3,5,4,6)]
-      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
+      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect (FASTmrEMMA)","'-log10(P) (FASTmrEMMA)'","Genotype for code 1")
       
     }
     if(inputform==3){
@@ -1069,31 +1047,8 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
       
       parmsShow<-cbind(genRaw[-1,1],parmeter,outATCG)
       parmsShow<-parmsShow[,c(1,2,3,5,4,6)]
-      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect","'-log10(P)'","Genotype for code 1")
+      colnames(parmsShow)<-c("Marker","Chromosome","Marker position (bp)","SNP effect (FASTmrEMMA)","'-log10(P) (FASTmrEMMA)'","Genotype for code 1")
     }
-    
-    bpnumber <- numeric()
-    chrnum <- unique(ress1[,1])
-    for(i in 1:length(chrnum))
-    {
-      bpnumber <- rbind(bpnumber,as.matrix(c(1:length(which(ress1[,1]==chrnum[i])))))
-    }
-    parms <- data.frame(ress1,snpname,bpnumber)
-    colnames(parms)<-c("Chromosome","Position","P-value","SNPname","BPnumber")
-    parms<-parms[,-2]
-    
-    mannewp <- as.matrix(mannewp)
-    rowbl<-matrix("",(nrow(parms)-1),1)
-    mannepr<-rbind(mannewp,rowbl)
-    colnames(mannepr)<-"Manhattan P-value"
-    
-    parms<-cbind(as.matrix(parms),mannepr)
-    parms<-as.data.frame(parms,stringsAsFactors=FALSE)
-    parms[,c(1,2,4)]<-sapply(parms[,c(1,2,4)],as.numeric)
-    ress1<-as.data.frame(ress1[,-(1:2)])
-    
-    colnames(ress1)<-"P-value"
-    
     
     Xemma<-data.frame(chr.locus=xnames,REML.LRT.c2.new)
     vid<-which(as.numeric(Xemma[,3])<=svpal)
@@ -1219,7 +1174,7 @@ FASTmrEMMA<-function(gen,phe,outATCG,genRaw,kk,psmatrix,svpal,svmlod,Genformat,L
         
       }  
     }  
-    output<-list(result1=parmsShow,result2=wan,Manhattan=parms,QQ=ress1)
+    output<-list(result1=parmsShow,result2=wan)
     return(output)
   }
 }

@@ -9,23 +9,24 @@ if(is.null(kk)){
   }else{
     envgenq<-deepcopy(gen,3:ncol(gen))
     envgenq2<-t(envgenq[,])
-    envgen<-big.matrix(nrow(envgenq2),ncol(envgenq2),type='double',shared = FALSE)
-    envgen[,]<-envgenq2[,]
-    rm(envgenq,envgenq2)
+    # envgen<-big.matrix(nrow(envgenq2),ncol(envgenq2),type='double',shared = FALSE)
+    # envgen[,]<-envgenq2[,]
+    rm(envgenq)
     gc()
     
-    m<-ncol(envgen)
-    n<-nrow(envgen)
-    kk1<-matrix(0,n,n)
-    for(k in 1:m){
-      z<-as.matrix(envgen[,k])
-      kk1<-kk1+z%*%t(z)
-    }
+    # m<-ncol(envgen)
+    # n<-nrow(envgen)
+    #kk1<-matrix(0,n,n)
+    # for(k in 1:m){
+    #   z<-as.matrix(envgen[,k])
+    #   kk1<-kk1+z%*%t(z)
+    # }
+    kk1<-mrMLM.GUI::multiplication_speed(envgenq2,t(envgenq2))
     cc<-mean(diag(kk1))
     kk1<-kk1/cc
     kk<-as.matrix(kk1)
   }
-  rm(envgen,kk1)
+  rm(kk1)
   gc()
 } 
 
@@ -368,6 +369,7 @@ registerDoParallel(cl)
 
 if((flagps==1)||(is.null("psmatrix")))
 {
+  k<-numeric()
   ff=foreach(k=1:m, .multicombine=TRUE, .combine = 'rbind')%dopar%
   {
     #browser()
@@ -406,6 +408,7 @@ if((flagps==1)||(is.null("psmatrix")))
   
   ll<-rbind(ll,ff)
 }else if(flagps==0){
+  k<-numeric()
   ff=foreach(k=1:m, .multicombine=TRUE, .combine = 'rbind')%dopar%
   {
     #browser()
@@ -516,7 +519,7 @@ if(inputform==1){
   tempparms[which(abs(tempparms)>=1e-4)]<-round(tempparms[which(abs(tempparms)>=1e-4)],4)
   tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
   parmsShow<-cbind(genRaw[-1,1],parms[,2:3],tempparms,genRaw[-1,4],meadd)
-  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect","Sigma2_k_posteriori","Wald","'-log10(P)'","Genotype for code 1","Significance")
+  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect (mrMLM)","Sigma2_k_posteriori","Wald","'-log10(P) (mrMLM)'","Genotype for code 1","Significance")
 }
 if(inputform==2){
   #output result1 using mrMLM character format
@@ -530,7 +533,7 @@ if(inputform==2){
   tempparms[which(abs(tempparms)>=1e-4)]<-round(tempparms[which(abs(tempparms)>=1e-4)],4)
   tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
   parmsShow<-cbind(genRaw[-1,1],parms[,2:3],tempparms,outATCG,meadd)
-  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect","Sigma2_k_posteriori","Wald","'-log10(P)'","Genotype for code 1","Significance")
+  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect (mrMLM)","Sigma2_k_posteriori","Wald","'-log10(P) (mrMLM)'","Genotype for code 1","Significance")
 }
 if(inputform==3){
   #output result1 using TASSEL format
@@ -546,38 +549,12 @@ if(inputform==3){
   tempparms[which(abs(tempparms)>=1e-4)]<-round(tempparms[which(abs(tempparms)>=1e-4)],4)
   tempparms[which(abs(tempparms)<1e-4)]<-as.numeric(sprintf("%.4e",tempparms[which(abs(tempparms)<1e-4)]))
   parmsShow<-cbind(genRaw[-1,1],parms[,2:3],tempparms,outATCG,meadd)
-  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect","Sigma2_k_posteriori","Wald","'-log10(P)'","Genotype for code 1","Significance")
+  colnames(parmsShow)<-c("RS#","Chromosome","Marker position (bp)","Mean","Sigma2","Sigma2_k","SNP effect (mrMLM)","Sigma2_k_posteriori","Wald","'-log10(P) (mrMLM)'","Genotype for code 1","Significance")
 }
 
 rm(genRaw)
 gc()
 
-rowsnp <- dim(parms)[1]
-snpname <- numeric()
-snpname <- as.matrix(paste("rs",c(1:rowsnp),sep=""))
-
-bpnumber <- numeric()
-chrnum <- unique(parms[,2])
-for(i in 1:length(chrnum))
-{
-  bpnumber <- rbind(bpnumber,as.matrix(c(1:length(which(parms[,2]==chrnum[i])))))
-}
-parms <- data.frame(parms.pchange,snpname,bpnumber)
-colnames(parms)<-c("Trait","Chromosome","Position","Mean","Sigma2","Sigma2_k","SNP effect","Sigma2_k_posteriori","Wald","P-value","SNPname","BPnumber")
-parms<-parms[,-c(1,3,4,5,6,7,8,9)]
-
-mannewp <- as.matrix(mannewp)
-rowbl<-matrix("",(nrow(parms)-1),1)
-mannepr<-rbind(mannewp,rowbl)
-
-colnames(mannepr)<-"Manhattan P-value"
-
-parms<-cbind(as.matrix(parms),mannepr)
-parms<-as.data.frame(parms,stringsAsFactors=FALSE)
-parms[,c(1,2,4)]<-sapply(parms[,c(1,2,4)],as.numeric)
-
-parms.pchange<-as.data.frame(parms.pchange[,-(1:9)])
-colnames(parms.pchange)<-"P-value"
 
 gg<-as.matrix(gg)
 misfit<-numeric()
@@ -872,7 +849,7 @@ if(length(w2)!=0){
 if(is.null(parmsShow)==FALSE){
   parmsShow<-parmsShow[,-c(4,5,6,8,9,12)]
 }
-output<-list(result1=parmsShow,result2=wan,Manhattan=parms,QQ=parms.pchange)
+output<-list(result1=parmsShow,result2=wan)
 return(output) 
 }
 }

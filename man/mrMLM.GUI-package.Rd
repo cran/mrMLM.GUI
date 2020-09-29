@@ -12,10 +12,10 @@ Description: Conduct multi-locus genome-wide association study under the framewo
 \tabular{ll}{
 Package: \tab mrMLM.GUI\cr
 Type: \tab Package\cr
-Version: \tab 4.0\cr
-Date: \tab 2019-10-21\cr
-Depends: \tab shiny,ggplot2,lars\cr
-Imports: \tab methods,qqman,foreach,ncvreg,coin,sampling,data.table,doParallel,shinyjs,bigmemory,mrMLM\cr
+Version: \tab 4.0.1\cr
+Date: \tab 2020-9-29\cr
+Depends: \tab shiny,lars\cr
+Imports: \tab methods,foreach,ncvreg,coin,sampling,data.table,doParallel,shinyjs,bigmemory,mrMLM\cr
 License: \tab GPL version 2 or newer\cr
 LazyLoad: \tab yes\cr
 }
@@ -33,8 +33,8 @@ Maintainer: Yuan-Ming Zhang<soyzhang@mail.hzau.edu.cn>
 5. Ren WL, Wen YJ, Dunwell JM, Zhang YM*. Heredity 2018,120(3): 208-218.
 6. Wen YJ, Zhang H, Ni YL, Huang B, Zhang J, Feng JY, et al. Brief Bioinform 2018,19(4):700-712.
 7. Tamba CL, Zhang YM. bioRxiv,preprint first posted online Jun. 7, 2018, doi:https://doi.org/10.1101/341784.
-8. Zhang YW, Tamba CL, Wen YJ, Li P, Ren WL, Ni YL, et al. Genomics, Proteomics & Bioinformatics, resubmission.
+8. Zhang YW, Tamba CL, Wen YJ, Li P, Ren WL, Ni YL, et al. Genomics, Proteomics & Bioinformatics, Accept.
 }
 \examples{
-\donttest{ mrMLM.GUI() }
+\dontrun{ mrMLM.GUI() }
 }

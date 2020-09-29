@@ -1,5 +1,5 @@
 mrMLM.GUI<-function(){
-
+  
   server<-(function(input, output,session) {
     
     options(shiny.maxRequestSize=-1)
@@ -14,36 +14,35 @@ mrMLM.GUI<-function(){
                  br(),
                  column(10,
                         h4("1. Zhang YM, Mao Y, Xie C, Smith H, Luo L, Xu S*. Mapping quantitative trait loci using 
-                           naturally occurring genetic variance among commercial inbred lines of maize (Zea mays L.).
-                           Genetics 2005;169:2267-2275"),
+                           naturally occurring genetic variance among commercial inbred lines of maize (", em("Zea mays "),
+                           "L.).Genetics 2005;169:2267-2275"),
                         h4("2. Wang SB, Feng JY, Ren WL, Huang B, Zhou L, Wen YJ, Zhang J, Jim M Dunwell, Xu S*, Zhang YM*.
                            Improving power and accuracy of genome-wide association studies via a multi-locus mixed linear
-                           model methodology. Scientific Reports 2016;6:19444. doi:10.1038/srep19444 (mrMLM)"),
+                           model methodology. Scientific Reports 2016;6:19444. (mrMLM)"),
                         h4("3. Tamba CL, Ni YL, Zhang YM*. Iterative sure independence screening EM-Bayesian LASSO algorithm for
-                           multi-locus genome-wide association studies. PLoS Computational Biology 2017;13(1):e1005357. doi:10.1371/
-                           journal.pcbi.1005357 (ISIS EM-BLASSO)"),
+                           multi-locus genome-wide association studies. PLoS Computational Biology 2017;13(1):e1005357. (ISIS EM-BLASSO)"),
                         h4("4. Zhang J, Feng JY, Ni YL, Wen YJ, Niu Y, Tamba CL, Yue C, Song QJ, Zhang YM*. pLARmEB: 
                            integration of least angle regression with empirical Bayes for multi-locus genome-wide association
-                           studies. Heredity 2017;118(6):517-524. doi:10.1038/hdy.2017.8 (pLARmEB)"),
-                         h4("5. Ren WL, Wen YJ, Jim M Dunwell, Zhang YM*. pKWmEB: integration of Kruskal-Wallis test with
+                           studies. Heredity 2017;118(6):517-524. (pLARmEB)"),
+                        h4("5. Ren WL, Wen YJ, Jim M Dunwell, Zhang YM*. pKWmEB: integration of Kruskal-Wallis test with
                            empirical Bayes under polygenic background control for multi-locus genome-wide association study. 
-                           Heredity 2018;120(3):208-218. https://doi.org/10.1038/s41437-017-0007-4 (pKWmEB)"),
-                         h4("6. Wen YJ, Zhang H, Ni YL, Huang B, Zhang J, Feng JY, Wang SB, Jim M Dunwell, Zhang YM*, Wu R*.
-						                Methodological implementation of mixed linear models in multi-locus genome-wide association studies. 
-                           Briefings in Bioinformatics 2018;19(4):700-712 doi:10.1093/bib/bbw145 (FASTmrEMMA)"),
-                         h4("7. Tamba CL, Zhang YM. A fast mrMLM algorithm for multi-locus genome-wide association studies.
-                           bioRxiv;preprint first posted online Jun. 7, 2018;doi: https://doi.org/10.1101/341784. (FASTmrMLM)"),
-                         h4("8. Zhang Ya-Wen, Tamba Cox Lwaka, Wen Yang-Jun, Li Pei, Ren Wen-Long, Ni Yuan-Li, Gao Jun, Zhang Yuan-Ming*. 
+                           Heredity 2018;120(3):208-218. (pKWmEB)"),
+                        h4("6. Wen YJ, Zhang H, Ni YL, Huang B, Zhang J, Feng JY, Wang SB, Jim M Dunwell, Zhang YM*, Wu R*.
+                           Methodological implementation of mixed linear models in multi-locus genome-wide association studies. 
+                           Briefings in Bioinformatics 2018;19(4):700-712. (FASTmrEMMA)"),
+                        h4("7. Tamba CL, Zhang YM. A fast mrMLM algorithm for multi-locus genome-wide association studies. 
+                           bioRxiv, 2018. doi: 10.1101/341784. (FASTmrMLM)"),
+                        h4("8. Zhang Yuan-Ming, Jia Zhenyu, Jim M. Dunwell. Editorial: The applications of new multi-locus GWAS 
+                            methodologies in the genetic dissection of complex traits. Frontiers in Plant Science 2019, 10: 100."),
+                        h4("9. Zhang Ya-Wen, Tamba Cox Lwaka, Wen Yang-Jun, Li Pei, Ren Wen-Long, Ni Yuan-Li, Gao Jun, Zhang Yuan-Ming*. 
                            mrMLM v4.0: An R platform for multi-locus genome-wide association studies. Genomics, Proteomics & Bioinformatics
-						               2019;resubmission"),
-                         br(),
-                         br(),
-                        
+                           2020; Accept (bioRxiv, 2020.03.04.976464)"),
+                        br(),
                         h4("Authors: Zhang Ya-Wen, Li Pei, Zhang Yuan-Ming"),
                         
                         h4("Maintainer: Zhang Yuan-Ming (soyzhang at mail.hzau.edu.cn)"), 
                         
-                        h4("mrMLM.GUI version 4.0, Realeased October 2019"),
+                        h4("mrMLM.GUI version 4.0.1, Realeased September 2020"),
                         
                         offset=1)
                  
@@ -235,7 +234,6 @@ mrMLM.GUI<-function(){
                               textInput("trait", "Traits analyzed", value="1"),
                               radioButtons("Drawall", "Draw plot (All methods)", choices = c("TRUE","FALSE"),selected="FALSE"),
                               conditionalPanel("input.Drawall=='TRUE'",
-                                               radioButtons("Resolution", "Plot resolution (All methods)", choices = c("High", "Low")),
                                                radioButtons("Plotformat", "Plot format (All methods)", choices = c("*.png", "*.tiff", "*.jpeg","*.pdf"))
                               )
                               
@@ -257,126 +255,96 @@ mrMLM.GUI<-function(){
             tabPanel("Manhattan Plot",id="manp",
                      
                      fluidRow(
-                       column(12,
-                              radioButtons("Precisionman", "Resolution of plot", c("General resolution", "High resolution", "Set by yourself"),inline = TRUE)
-                       ),
-                       column(3,
-                              textInput("manwidthmr", label = "Figure width (px):",value = "960"),
-                              selectInput(inputId = "manchcolour1mr",label = "Chromosome colour (odd):",
-                                          choices = c("blue","black","red","yellow","green","pink","purple","gray","brown"),selected = "blue"),
-                              fileInput("filemanmr", "File to draw Manhattan plot",multiple = TRUE,accept = ".csv")
-                       ),
-                       column(3,
-                              textInput("manheimr", label = "Figure height (px)",value = "600"),
-                              selectInput(inputId = "manchcolour2mr",label = "Chromosome colour (even):",
-                                          choices = c("blue","black","red","yellow","green","pink","purple","gray","brown"),selected = "red")
-                              
-                       ),
-                       column(3,
-                              textInput("manwordremr", label = "Word resolution (1/72 inch, ppi):",value = "20"),
-                              textInput("mancrimr", label = "Critical value for Manhattan Plot:",value = "3")
-                       ),
                        
-                       column(3,
-                              textInput("manfigureremr", label = "Figure resolution (ppi):",value = "72"),
-                              selectInput(inputId = "plotmethodman",label = "Method selection",
-                                          choices = c("mrMLM","FASTmrMLM","FASTmrEMMA","pKWmEB"),selected = "mrMLM")
-                       ),
-                       column(12,
-                              radioButtons("plmanformat", "Manhattan plot format", c("*.png", "*.tiff", "*.jpeg","*.pdf"),inline = TRUE)
+                       column(6,
+                              fileInput("filemanIn", "Intermediate result to draw Manhattan plot",multiple = TRUE,accept = ".csv"),
+                              fileInput("filemanFin", "Final result to draw Manhattan plot",multiple = TRUE,accept = ".csv"),
+                              radioButtons("plmanformat", "Manhattan plot format", c("*.png", "*.tiff", "*.jpeg","*.pdf")),
+                              conditionalPanel("input.plmanformat != '*.pdf'",
+                                               textInput("manwidthmr", label = "Figure width (px):",value = "28000"),
+                                               textInput("manheimr", label = "Figure height (px)",value = "7000"),
+                                               textInput("manwordremr", label = "Word resolution (1/72 inch, ppi):",value = "60"),
+                                               textInput("manfigureremr", label = "Figure resolution (ppi):",value = "600")
+                              ),
+                              conditionalPanel("input.plmanformat == '*.pdf'",
+                                               textInput("manwidthpdf", label = "Figure width (inches):",value = "16"),
+                                               textInput("manheipdf", label = "Figure height (inches)",value = "4"),
+                                               textInput("manpoipdf", label = "Word resolution (1/72 inch, ppi):",value = "20")                
+                              ),
                               
-                       ),
-                       
-                       column(12,
-                              downloadButton("downloadmanplot", "Save Manhattan plot")
-                       ),
-                       
-                       column(12,
-                              plotOutput("mplmr")
+                              textInput("labelsize", label = "Size of all the three labels",value = "0.8"),
+                              textInput("TckLwd", label = "Size of scale values",value = "0.7"),
+                              textInput("CoorLwd", label = "Width of all the three axes",value = "5"),
+                              textInput("TckLen", label = "Length of tick marks",value = "-0.03")
+                           ),
+                       column(6,
+                             textInput("VerLabDis", label = "Distance between label and axis",value = "1.5"),
+                              #textInput("HorLabDis", label = "Distance between label and horizontal axis",value = "1.5"),
+                              textInput("VerTckDis", label = "Distance between scale values and tick marks",value = "0.4"),
+                              #textInput("HorTckDis", label = "Distance between scale values and horizontal tick marks",value = "0.2"),
+                              textInput("logtimes", label = "Magnification of {-log10(P-value)}",value = "2"),
+                              textInput("LODtimes", label = "Magnification of {LOD score}",value = "1.2"),
                               
-                       )
-                     )
+                              radioButtons("markgene", "Mark genes or not", c("TRUE", "FALSE"),selected = "FALSE"),
+                              conditionalPanel("input.markgene == 'TRUE'",
+                                               textInput("posX", label = "Numeric vectors of x axis",value = "139,195"),
+                                               textInput("posY", label = "Numeric vectors of y axis",value = "7.5,7"),
+                                               textInput("Genename",label = "Character vectors of gene names that mark in the plot ",value = "Gene1,Gene2"),
+                                               textInput("colorname",label = "Colour of gene names",value = "blue")                
+                                               
+                              ),
+                              
+                              textInput("Saveplot", "Save path",value = "C:/Users/Administrator/Desktop"),
+                              br(),
+
+                              actionButton("drawman", label = "Draw Manhattan plot",icon("paper-plane"), 
+                                           style="color: #fff; background-color: #337ab7; border-color: #2e6da4",width="55%"),
+                             plotOutput("manout")
+                         )
+                      )
             ),
             
             tabPanel("QQ Plot",id="qqp",
                      
                      fluidRow(
                        
-                       column(12,
-                              radioButtons("Precisionqq", "Resolution of plot", c("General resolution", "High resolution", "Set by yourself"),inline = TRUE) 
-                       ),
-                       
-                       column(3,
-                              textInput("qqwidthmr", label = "Figure width (px):",value = "960"),
-                              selectInput(inputId = "qqchcolour1mr",label = "Point colour:",
-                                          choices = c("blue","black","red","yellow","green","pink","purple","gray","brown"),selected = "red"),
-                              fileInput("fileqqmr", "File to draw QQ plot",multiple = TRUE,accept = ".csv")
-                       ),
-                       column(3,
-                              textInput("qqheimr", label = "Figure height (px)",value = "600"),
-                              selectInput(inputId = "qqchcolour2mr",label = "Line colour:",
-                                          choices = c("blue","black","red","yellow","green","pink","purple","gray","brown"),selected = "black")
+                       column(6,
+                              fileInput("fileqqmr", "File to draw QQ plot",multiple = TRUE,accept = ".csv"),
+                              radioButtons("plqqformat", "QQ plot format", c("*.png", "*.tiff", "*.jpeg","*.pdf")),
+                              conditionalPanel("input.plqqformat != '*.pdf'",
+                                               textInput("qqwidthmr", label = "Figure width (px):",value = "10000"),
+                                               textInput("qqheimr", label = "Figure height (px)",value = "10000"),
+                                               textInput("qqwordremr", label = "Word resolution (1/72 inch, ppi):",value = "60"),
+                                               textInput("qqfigureremr", label = "Figure resolution (ppi):",value = "600")
+                              ),
+                              conditionalPanel("input.plqqformat == '*.pdf'",
+                                               textInput("qqwidthpdf", label = "Figure width (inches):",value = "7"),
+                                               textInput("qqheipdf", label = "Figure height (inches)",value = "7"),
+                                               textInput("qqpoipdf", label = "Word resolution (1/72 inch, ppi):",value = "25")                
+                              ),
+                              textInput("labelsizeqq", label = "Size of all the two labels",value = "0.7"),
+                              textInput("CoorLwdqq", label = "Size of all the two axes",value = "3")
                               
                        ),
-                       column(3,
-                              textInput("qqwordremr", label = "Word resolution (1/72 inch, ppi):",value = "20"),
-                              selectInput(inputId = "plotmethodqq",label = "Method selection",
-                                          choices = c("mrMLM","FASTmrMLM","FASTmrEMMA","pKWmEB"),selected = "mrMLM")
-                       ),
                        
-                       column(3,
-                              textInput("qqfigureremr", label = "Figure resolution (ppi):",value = "72")
-                       ),
-                       column(12,
-                              radioButtons("plqqformat", "QQ plot format", c("*.png", "*.tiff", "*.jpeg","*.pdf"),inline = TRUE)
-                       ),
-                       
-                       column(12,
-                              downloadButton("downloadqqplot", "Save QQ plot")
-                       ),
-                       column(12,
-                              plotOutput("qplmr")                                
+                       column(6,
+                              textInput("TckLenqq", label = "Length of tick marks",value = "-0.02"),
+                              textInput("TckLwdqq", label = "Size of scale values",value = "0.6"),
+                              textInput("VerLabDisqq", label = "Distance between label and vertical axis",value = "1.1"),
+                              textInput("HorLabDisqq", label = "Distance between label and horizontal axis",value = "1"),
+                              textInput("VerTckDisqq", label = "Distance between scale values and vertical tick marks",value = "0.3"),
+                              textInput("HorTckDisqq", label = "Distance between scale values and horizontal tick marks",value = "0.02"),
+                              textInput("pstand", label = "Critical P-value of deleting points",value = "0.9"),
+                              textInput("Saveplotqq", "Save path",value = "C:/Users/Administrator/Desktop"),
+                              br(),
+                              br(),
+                              actionButton("drawqq", label = "Draw QQ plot",icon("paper-plane"), 
+                                           style="color: #fff; background-color: #337ab7; border-color: #2e6da4",width="55%"),
+                              
+                              plotOutput("qqout")
+                              
                        )
                      ) 
-            ),
-            
-            tabPanel("Plot of LOD Score against Genome position",id="lodp",
-                     
-                     fluidRow(
-                       
-                       column(12,
-                              radioButtons("Precisionlod", "Resolution of plot", c("General resolution", "High resolution", "Set by yourself"),inline = TRUE) 
-                       ),
-                       
-                       column(4,
-                              textInput("ppwidthPLA", label = "Figure width (px):",value = "960"),
-                              textInput("ppfigurerePLA", label = "Figure resolution (ppi):",value = "72"),
-                              fileInput("fileppPLA", "File to draw plot",multiple = TRUE,accept = ".csv")
-                       ),
-                       column(4,
-                              textInput("ppheiPLA", label = "Figure height (px)",value = "240"),
-                              selectInput(inputId = "ppchcolour1PLA",label = "Lod line colour:",
-                                          choices = c("blue","black","red","yellow","green","pink","purple","gray","brown"),selected = "red")
-                              
-                       ),
-                       column(4,
-                              textInput("ppwordrePLA", label = "Word resolution (1/72 inch, ppi):",value = "12"),
-                              selectInput(inputId = "plotmethodlod",label = "Method selection",
-                                          choices = c("pLARmEB","ISIS EM-BLASSO"),selected = "pLARmEB")
-                       ),
-                       column(12,
-                              radioButtons("plppformatPLA", "Plot format", c("*.png", "*.tiff", "*.jpeg","*.pdf"),inline = TRUE)
-                              
-                       ),
-                       
-                       column(12,
-                              downloadButton("downloadppplotPLA", "Save plot")
-                       ),                         
-                       
-                       column(12,
-                              plotOutput("qplPLA")
-                       )
-                     )          
             )
           ),
           
@@ -660,14 +628,15 @@ mrMLM.GUI<-function(){
         if(is.null(kkRaw)){
           kk<-NULL
         }else{
-          kkPre<-as.matrix(kkRaw[-1,-1])
-          nameKin<-as.matrix(kkRaw[-1,1])
+          # kkPre<-as.matrix(kkRaw[-1,-1])
+          # nameKin<-as.matrix(kkRaw[-1,1])
+          kkPre<-as.matrix(kkRaw[,-1])
+          nameKin<-as.matrix(kkRaw[,1])
           sameGenKin<-intersect(sameName,nameKin)
           locKin<-match(sameGenKin,nameKin)
           kk<-kkPre[locKin,locKin]
           kk<-matrix(as.numeric(kk),nrow=nrow(kk))
         }
-        
         
         if(is.null(psmatrixRaw)){
           psmatrix<-NULL
@@ -764,7 +733,7 @@ mrMLM.GUI<-function(){
           }else if(all(label=="Con")){
             yygg1<-selectcovmatrixq
           }
-        
+          
           W.orig<-matrix(1,nrow(phe),1)
           xenvir<-cbind(W.orig,yygg1)
           xenvir<-apply(xenvir,2,as.numeric)
@@ -825,82 +794,6 @@ mrMLM.GUI<-function(){
     
     output$manl<-renderUI(manual())
     
-    upda1<-observeEvent(input$Precisionman,{
-      
-      if(input$Precisionman=="High resolution"){
-        widthman<-10000
-        heightman<-6000
-        wordman<-30
-        figureman<-300
-      }else if(input$Precisionman=="General resolution"){
-        widthman<-960
-        heightman<-600
-        wordman<-20
-        figureman<-72
-      }else if(input$Precisionman=="Set by yourself"){
-        widthman<-0
-        heightman<-0
-        wordman<-0
-        figureman<-0
-      }
-      
-      updateTextInput(session, "manwidthmr", value=widthman)
-      updateTextInput(session, "manheimr", value=heightman)
-      updateTextInput(session, "manwordremr", value=wordman)
-      updateTextInput(session, "manfigureremr", value=figureman)
-      
-    }) 
-    
-    
-    upda2<-observeEvent(input$Precisionqq,{   
-      
-      if(input$Precisionqq=="High resolution"){
-        widthqq<-10000
-        heightqq<-6000
-        wordqq<-30
-        figureqq<-300
-      }else if(input$Precisionqq=="General resolution"){
-        widthqq<-960
-        heightqq<-600
-        wordqq<-20
-        figureqq<-72
-        
-      }else if(input$Precisionqq=="Set by yourself"){
-        widthqq<-0
-        heightqq<-0
-        wordqq<-0
-        figureqq<-0
-      }
-      updateTextInput(session, "qqwidthmr", value=widthqq)
-      updateTextInput(session, "qqheimr", value=heightqq)
-      updateTextInput(session, "qqwordremr", value=wordqq)
-      updateTextInput(session, "qqfigureremr", value=figureqq)
-    }) 
-    
-    
-    upda3<-observeEvent(input$Precisionlod,{   
-      if(input$Precisionlod=="High resolution"){
-        widthlod<-10000
-        heightlod<-6000
-        wordlod<-30
-        figurelod<-600
-      }else if(input$Precisionlod=="General resolution"){
-        widthlod<-960
-        heightlod<-240
-        wordlod<-12
-        figurelod<-72
-        
-      }else if(input$Precisionlod=="Set by yourself"){
-        widthlod<-0
-        heightlod<-0
-        wordlod<-0
-        figurelod<-0
-      }
-      updateTextInput(session, "ppwidthPLA", value=widthlod)
-      updateTextInput(session, "ppheiPLA", value=heightlod)
-      updateTextInput(session, "ppwordrePLA", value=wordlod)
-      updateTextInput(session, "ppfigurerePLA", value=figurelod)
-    })
     
     genRawmr<-reactive({
       req(input$filegenmr)
@@ -939,7 +832,7 @@ mrMLM.GUI<-function(){
     })
     
     output$contentsrawphemr <- renderTable({
-     
+      
       if(input$dispphemr == "head"){
         return(head(CoRaPhemr()))
       }else{
@@ -962,11 +855,11 @@ mrMLM.GUI<-function(){
       kkRaw3<-as.data.frame(kkRaw2)
       colnames(kkRaw3)<-kkRaw[1,]
       kkRaw3
-     
+      
     })
     
     output$kinshipmr<-renderTable({
-    
+      
       if(input$ckmr=="inmr"){
         
         if(input$dispkinmr == "head"){
@@ -976,7 +869,7 @@ mrMLM.GUI<-function(){
         }
         
       }
-     })
+    })
     
     observe({
       shinyjs::toggleState("filekmr",input$ckmr!="cmr")
@@ -1086,137 +979,245 @@ mrMLM.GUI<-function(){
       PopStrType<-input$poptypeall
       
       if(DrawPlot==TRUE){
-        Plot<-function(plotresult=NULL,color1=NULL,color2=NULL,p_stand=NULL,method=NULL,type=NULL){
-          Manhattan<-function(plotresult,color1,color2){
-            parms<-as.data.frame(plotresult)
-            mannewp<-as.numeric(parms[1,5])
-            svgwline<-round(-log10(mannewp),4)  
-            standline<-svgwline
-            manhattan(parms,chr = "Chromosome",bp ="BPnumber",p ="P-value",snp="SNPname",col=c(color1,color2),suggestiveline=FALSE,genomewideline = standline)
+        manhattan_mrMLM<-function(data_in,data_fin,mar=c(2.9,2.8,0.7,2.8),VerLabDis=1.5,HorLabDis=1.5,
+                                  HorTckDis=0.2,VerTckDis=0.4,label_size=0.8,CoorLwd=5,
+                                  TckLen=-0.03,TckLwd=0.7,log_times=2,LOD_times=1.2,lodline){
+          
+          ###########Data process#################
+          ###########intermediate result
+          method<-unique(data_in[,3])
+          data_method<-list(NULL)
+          for(i in 1:length(method)){
+            data_method[[i]]<-data_in[which(data_in[,3]==method[i]),]
+          }
+          logp_4method<-numeric()
+          for(i in 1:length(method)){
+            method_p<-data_method[[i]][,8]
+            logp_4method<-cbind(logp_4method,method_p) 
+          }
+          logp_4method<-apply(logp_4method,2,as.numeric)
+          p_4method<-10^-logp_4method
+          p_median<-apply(p_4method,1,median)
+          locsub<-which(p_median==0)
+          pmin<-min(p_median[p_median!=0])
+          subvalue<-10^(1.1*log10(pmin))
+          p_median[locsub]<-subvalue
+          data_p<-as.matrix(p_median)
+          data_num<-as.matrix(seq(1:length(p_median)))
+          data_chr<-as.matrix(data_method[[1]][,5])
+          data_pos<-as.matrix(data_method[[1]][,6])
+          manresult<-cbind(data_chr,data_pos,data_p,data_num)
+          manresult<-apply(manresult,2,as.numeric)
+          colnames(manresult)<-c("Chromosome","BPnumber","P-value","SNPname")
+          manresult<-as.data.frame(manresult)
+          #######final result##################
+          data_fin_method<-unique(data_fin[,3])
+          data_fin_method_length<-1:length(unique(data_fin[,3]))
+          for(r in 1:length(unique(data_fin[,3]))){
+            data_fin[which(data_fin[,3]==data_fin_method[r]),3]<-r
+          }
+          data_fin_mark<-matrix(data_fin[,c(5,6,8,3)],,4)
+          data_fin_mark<-matrix(apply(data_fin_mark,2,as.numeric),,4)
+          data_fin_mark_chr<-matrix(data_fin_mark[order(data_fin_mark[,1]),],,4)
+          data_fin_mark_order<-numeric()
+          for(i in c(unique(data_fin_mark_chr[,1]))){
+            data_fin_mark_erery_chr<-matrix(data_fin_mark_chr[which(data_fin_mark_chr[,1]==i),],,4)
+            data_fin_mark_pos<-matrix(data_fin_mark_erery_chr[order(data_fin_mark_erery_chr[,2]),],,4)
+            all_pos<-unique(data_fin_mark_pos[,2])
+            all_pos_maxlod<-numeric()
+            for(ii in 1:length(all_pos)){
+              all_pos_every<-matrix(data_fin_mark_pos[which(data_fin_mark_pos[,2]==all_pos[ii]),],,4)
+              lod_me<-median(all_pos_every[,3])
+              all_pos_every_median<-c(all_pos_every[1,1:2],lod_me,all_pos_every[1,4])
+              if(nrow(all_pos_every)>=2){
+                all_pos_every_median<-c(all_pos_every[1,1:2],lod_me,max(data_fin_mark[,4])+1)
+              }
+              all_pos_maxlod<-rbind(all_pos_maxlod,all_pos_every_median)
+            }
+            data_fin_mark_order<-rbind(data_fin_mark_order,all_pos_maxlod)
+          }
+          snpOfInterest<-numeric()
+          for(i in c(unique(data_fin_mark_order[,1]))){
+            manresult_chr<-manresult[which(manresult[,1]==i),]
+            data_fin_mark_order_chr<-matrix(data_fin_mark_order[which(data_fin_mark_order[,1]==i),],,4)
+            mark_loc<-manresult_chr[which(manresult_chr[,2]%in%data_fin_mark_order_chr[,2]),4]
+            snpOfInterest<-c(snpOfInterest,mark_loc) 
+          }
+          bpnumber <- numeric()
+          chrnum <- unique(manresult[,1])
+          for(i in 1:length(chrnum))
+          {
+            bpnumber <- rbind(bpnumber,as.matrix(c(1:length(which(manresult[,1]==chrnum[i])))))
+          }
+          manresult2<-cbind(manresult[,1],bpnumber,manresult[,3:4])
+          colnames(manresult2)<-c("Chromosome","BPnumber","P-value","SNPname")
+          ##########prepare for data#############################
+          x<-manresult2;col=c("lightgreen","lightskyblue");logp=TRUE
+          chr = "Chromosome";bp ="BPnumber";p ="P-value";snp="SNPname";
+          highlight<-snpOfInterest
+          CHR=BP=P=index=NULL
+          d=data.frame(CHR=x[[chr]], BP=x[[bp]], P=x[[p]])
+          if (!is.null(x[[snp]])) d=transform(d, SNP=x[[snp]])
+          d <- subset(d, (is.numeric(CHR) & is.numeric(BP) & is.numeric(P)))
+          d <- d[order(d$CHR, d$BP), ]
+          if (logp) {
+            d$logp <- -log10(d$P)
+          } else {
+            d$logp <- d$P
+          }
+          d$pos=NA
+          d$index=NA
+          ind = 0
+          for (i in unique(d$CHR)){
+            ind = ind + 1
+            d[d$CHR==i,]$index = ind
           }
           
-          QQplot1<-function(plotresult,p_stand,color1,color2){
-            p_value<-as.matrix(plotresult)
-            pvalue<-matrix(p_value,,1)
-            observed<-sort(pvalue[,1])
-            observed<-observed/2
-            observed<-observed[which(observed!=0)]
-            newobserved<-observed[which(observed<(p_stand/2))]
-            lobs<--(log10(newobserved))
-            expected<-c(1:length(newobserved))
-            lexp<--(log10(expected/(length(pvalue)+1)))
-            plot(lexp,lobs,xlim=c(0,max(lexp)),ylim=c(0,max(lobs)),xlab=expression('Expected -log'[10]*'(P)'),ylab=expression('Observed -log'[10]*'(P)'),col=color2)
-            abline(0,1,col=color1)
-          }
-          QQplot2<-function(plotresult,color1,color2){
-            ress1<-as.data.frame(plotresult)
-            pvalue<-as.matrix(ress1)
-            ps<-pvalue[,1]
-            obs.x<-sort(ps)
-            newobs.x<-obs.x[obs.x<1]
-            n<-length(newobs.x)
-            es<-(1:n)/(n+1)
-            x<--log10(es)
-            y<--log10(newobs.x)
-            y<-y-0.3
-            plot(x,y,xlim=c(0.3,max(x)),ylim=c(0.3,max(y)),xlab=expression('Expected -log'[10]*'(P)'),ylab=expression('Observed -log'[10]*'(P)'),col=color2)
-            abline(0,1,col=color1)
-            
-          }
-          LOD<-function(fileplot=NULL,color1,method=NULL){
-            data<-as.matrix(plotresult)
-            data<-as.data.frame(data,stringsAsFactors = F)
-            gen<-data[,1:2]
-            resulty<-data[,3:5]
-            resultkq<-as.matrix(resulty)
-            resultk<-which(resultkq=="",arr.ind = TRUE)
-            resultq<-resulty[1:(resultk[1]-1),] 
-            
-            if(nrow(resultq)>1){
-              result<-resultq
-            }else{
-              result<-t(as.matrix(resultq))
+          nchr = length(unique(d$CHR))
+          if (nchr==1) { ## For a single chromosome
+            ## Uncomment the next two linex to plot single chr results in Mb
+            #options(scipen=999)
+            #d$pos=d$BP/1e6
+            d$pos=d$BP
+            ticks=floor(length(d$pos))/2+1
+            xlabel = paste('Chromosome',unique(d$CHR),'position')
+            labs = ticks
+          } else { ## For multiple chromosomes
+            lastbase=0
+            ticks=NULL
+            for (i in unique(d$index)) {
+              if (i==1) {
+                d[d$index==i, ]$pos=d[d$index==i, ]$BP
+              } else {
+                lastbase=lastbase+tail(subset(d,index==i-1)$BP, 1)
+                d[d$index==i, ]$pos=d[d$index==i, ]$BP+lastbase
+              }
+              # Old way: assumes SNPs evenly distributed
+              # ticks=c(ticks, d[d$index==i, ]$pos[floor(length(d[d$index==i, ]$pos)/2)+1])
+              # New way: doesn't make that assumption
+              ticks = c(ticks, (min(d[d$index == i,]$pos) + max(d[d$index == i,]$pos))/2 + 1)
             }
-            
-            galaxyy<-as.data.frame(result)
-            galaxyy<-sapply(galaxyy,as.numeric)
-            chr_pos <- gen[,1:2]
-            chr_pos<-sapply(chr_pos,as.numeric)
-            
-            chr_num <- length(unique(chr_pos[,1]))
-            chr <- matrix(0,chr_num,1)
-            pos <- matrix(0,chr_num,1)
-            for(i in 1:chr_num)
-            {
+            xlabel = 'Chromosomes'
+            #labs = append(unique(d$CHR),'') ## I forgot what this was here for... if seems to work, remove.
+            labs <- unique(d$CHR)
+          }
+          
+          xmax = ceiling(max(d$pos) * 1.03)
+          xmin = floor(max(d$pos) * -0.03)
+          
+          ########draw plot#######################
+          
+          par(mar=mar)
+          def_args <- list(xaxt='n',yaxt="n",bty='n', xaxs='i', yaxs='i', las=1, pch=20,
+                           xlim=c(xmin,xmax), ylim=c(0,log_times*max(d$logp)),
+                           xlab=xlabel,ylab="",mgp=c(HorLabDis,0,0),cex.lab=label_size)
+          
+          dotargs <- list(NULL)
+          do.call("plot", c(NA, dotargs, def_args[!names(def_args) %in% names(dotargs)]))
+          axis(1, at=ticks, labels=labs,lwd=CoorLwd,tck=TckLen,mgp=c(2.5,HorTckDis,0.5),cex.axis=TckLwd)
+          
+          
+         
+          suppressWarnings(axis(2, at=seq(0,log_times*max(d$logp),ceiling(log_times*max(d$logp)/5)),lwd=CoorLwd,tck=TckLen,mgp=c(2.2,VerTckDis,0),cex.axis=TckLwd))
+          mtext(expression(-log[10]('P-value')),side=2,line=VerLabDis,cex=label_size,font=1)
+          
+          # Create a vector of alternatiting colors
+          col=rep(col, max(d$CHR))
+          # Add points to the plot
+          if (nchr==1) {
+            with(d, points(pos, logp, pch=20, col=col[1]))
+          } else {
+            # if multiple chromosomes, need to alternate colors and increase the color index (icol) each chr.
+            icol=1
+            for (i in unique(d$index)) {
+              with(d[d$index==unique(d$index)[i], ], points(pos, logp, col=col[icol], pch=20))
+              icol=icol+1
+            }
+          }
+          d.highlight=d[which(d$SNP %in% highlight), ]
+          highlight_LOD<-as.numeric(data_fin_mark_order[,3])
+          d.highlight<-as.data.frame(cbind(d.highlight,highlight_LOD))
+          
+          ################################
+          par(new=T)
+          def_args <- list(xaxt='n', yaxt='n',bty='n', xaxs='i', yaxs='i', las=1, pch=20,
+                           xlim=c(xmin,xmax), ylim=c(0,LOD_times*max(highlight_LOD)),xlab="",ylab="")
+          dotargs <- list(NULL)
+          do.call("plot", c(NA, dotargs, def_args[!names(def_args) %in% names(dotargs)]))
+          suppressWarnings(axis(4,mgp=c(1.4,VerTckDis,0),at=seq(0,LOD_times*max(highlight_LOD),ceiling(LOD_times*max(highlight_LOD)/5)),col="magenta",col.ticks="magenta",col.axis="magenta",lwd=CoorLwd,tck=TckLen,cex.axis=TckLwd))
+          mtext("LOD score",side=4,line=VerLabDis,cex=label_size,font=1,col="magenta")
+          abline(h=lodline,col="gray25",lty=2,lwd=2)
+          peach_colors<-c("magenta","deepskyblue2")
+          col_pos<-list(NULL)
+          method_num<-sort(unique(data_fin_mark_order[,4]))
+          
+          if(max(unique(data_fin[,3]))<max(unique(data_fin_mark_order[,4]))){
+            col_pos[[1]]<-which(data_fin_mark_order[,4]==max(method_num))
+            col_pos[[2]]<-which(data_fin_mark_order[,4]!=max(method_num))
+          }else{
+            if(length(unique(data_fin[,3]))==1){
+              col_pos[[1]]<-which(data_fin_mark_order[,4]==max(method_num))
+            }else{
+              col_pos[[1]]<-1:nrow(data_fin_mark_order)
               
-              temp <- numeric()
-              temp <- length(which(chr_pos[,1]==i))
-              if(i==1)
-              {
-                pos[i] <- temp
-                chr[i] <- chr_pos[pos[i],2]
-              }else{
-                pos[i] <- pos[i-1] + temp
-                chr[i] <- chr_pos[pos[i],2]
-              }
             }
-            
-            pos_acc <- matrix(0,chr_num,1)
-            for(i in 1:chr_num)
-            {
-              if(i==1){
-                pos_acc[i] <- chr[i]
-              }else{
-                pos_acc[i] <- pos_acc[i-1] + chr[i]
-              }
-            }
-            
-            newres_pos <- galaxyy[,2]
-            res_sumpos <- pos_acc[galaxyy[which(galaxyy[,1]>1),1]-1] + galaxyy[which(galaxyy[,1]>1),2] 
-            newres_pos[which(galaxyy[,1]>1)] <- res_sumpos 
-            pospic<-c(newres_pos)
-            lodpic<-c(galaxyy[,3])  
-            mm<-round(max(pospic)/4000)
-            mm<-as.numeric(format(mm,digits = 1,scientific = TRUE))
-            pospicx<-pospic/mm
-            if(pospicx[1]<20){
-              pospicx[1]<-pospicx[1]+20
-            }
-            pos_acc1<-pos_acc/mm
-            resdf1 <- data.frame(pospicx,lodpic)
-            
-            pp <- ggplot(data=resdf1, aes(x=pospicx, y=lodpic)) +
-              geom_bar(stat="identity", width=0.5, fill="white", linetype="solid",color=color1)
-            
-            pp <- pp + geom_vline(xintercept=c(0,pos_acc1),linetype="dashed",alpha=0.2)
-            pp <- pp  + scale_x_continuous(expand=c(0,0),limits=c(0,(pos_acc1[dim(pos_acc1)[1]]+100))) +
-              scale_y_continuous(expand=c(0,0))
-            pp <- pp + xlab(paste("Genome position (",mm,"bp)",sep = "")) + ylab("LOD score") + ggtitle("") + theme_classic()
-            pp <- pp + theme(axis.title.y = element_text( vjust = 2,hjust=0.5,size = 14),
-                             axis.title.x = element_text(vjust = -0.5,hjust=0.5,size = 14))
-            
-            pp <- pp + theme(panel.background = element_rect(fill = "white"))
-            pp <- pp + theme(text=element_text(family="mono"))
-            pp <- pp + theme(axis.line.y = element_line(colour = "black", linetype = "solid"),
-                             axis.line.x = element_line(colour = "black", linetype = "solid"))
-            print(pp)
-            
-          }  
+          }
+          if(length(col_pos)>1&&length(col_pos[[2]])!=0){
+            with(d.highlight, points(pos[col_pos[[2]]], highlight_LOD[col_pos[[2]]], col=peach_colors[2], pch=20))
+            with(d.highlight, points(pos[col_pos[[2]]], highlight_LOD[col_pos[[2]]], col=peach_colors[2], pch=20,type="h",lty=2))
+            with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20))
+            with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20,type="h",lty=2))
+          }else{
+            with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20))
+            with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20,type="h",lty=2))
+          }
+      
+        }
+        
+        
+        
+        QQ_mrMLM<-function(data_in,mar=c(2.5,2.5,1,1),label_size=0.7,TckLen=-0.02,
+                           CoorLwd=3,TckLwd=0.6,HorLabDis=1,HorTckDis=0.02,VerLabDis=1.1,
+                           VerTckDis=0.3,P_stand=0.9){
           
-          if(type=="Manhattan"){
-            Manhattan(plotresult,color1,color2)
-          }else if(type=="qq"){
-            if(method=="FASTmrEMMA"){
-              QQplot2(plotresult,color1,color2)  
-            }else{
-              QQplot1(plotresult,p_stand,color1,color2) 
-            }
-          }else if(type=="LOD"){
-            LOD(plotresult,color1)
-          }  
+          method<-unique(data_in[,3])
+          data_method<-list(NULL)
+          for(i in 1:length(method)){
+            data_method[[i]]<-data_in[which(data_in[,3]==method[i]),]
+          }
+          logp_4method<-numeric()
+          for(i in 1:length(method)){
+            method_p<-data_method[[i]][,8]
+            logp_4method<-cbind(logp_4method,method_p) 
+          }
+          logp_4method<-apply(logp_4method,2,as.numeric)
+          p_4method<-10^-logp_4method
+          p_median<-apply(p_4method,1,median)
+          locsub<-which(p_median==0)
+          pmin<-min(p_median[p_median!=0])
+          subvalue<-10^(1.1*log10(pmin))
+          p_median[locsub]<-subvalue
+          data_p<-as.matrix(p_median)
+          p_value<-data_p
+          pvalue<-matrix(p_value,,1)
+          observed<-sort(pvalue[,1])
+          observed<-observed/2
+          observed<-observed[which(observed!=0)]
+          newobserved<-observed[which(observed<(0.9/2))]
+          lobs<--(log10(newobserved))
+          expected<-c(1:length(newobserved))
+          lexp<--(log10(expected/(length(pvalue)+1)))
+          par(mar=mar)
+          suppressWarnings(plot(lexp,lobs,xlim=c(0,max(lexp)),ylim=c(0,max(lobs)),xlab=expression('Expected -log'[10]*'(P-value)'),
+                                yaxt="n",ylab="",col="blue",pch=20,cex.lab=label_size,tck=TckLen,bty="l",lwd=CoorLwd,
+                                lwd.ticks=CoorLwd,cex.axis=TckLwd,mgp=c(HorLabDis,HorTckDis,0)))
+          suppressWarnings(axis(2, at=seq(0,max(lobs)),lwd=CoorLwd,tck=TckLen,mgp=c(2.2,VerTckDis,0),cex.axis=TckLwd))
+          mtext(expression('Observed -log'[10]*'(P-value)'),side=2,line=VerLabDis,cex=label_size,font=1)
+          abline(0,1,col="red")
+          box(bty="l",lwd=CoorLwd)
         }
       }
-
+      
       screen<-function(reMR,rawgen,gen_num,phe_num,ps_num){
         if(nrow(reMR)>=200){
           reMR4<-as.matrix(reMR[,4])
@@ -1253,7 +1254,7 @@ mrMLM.GUI<-function(){
         result<-list(reMR,indz)
         return(result)
       }
-    
+      
       readraw<-ReadData()
       if(input$radiomrformat=="mrMLM numeric format"){
         Genformat<-1  
@@ -1307,37 +1308,6 @@ mrMLM.GUI<-function(){
               colnames(tr1)<-"Trait ID"
               colnames(tr1na)<-"Trait name"
               re1MR<-cbind(tr1,tr1na,me1,as.matrix(outMR$result1))
-              remanMR<-outMR$Manhattan
-              reqqMR<-outMR$QQ
-              if(DrawPlot==TRUE){
-                if(Resolution=="Low"){
-                  manwidth<-960;manhei<-600;manwordre<-20;manfigurere<-72
-                }else if(Resolution=="High"){
-                  manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-300
-                }
-                if(Plotformat1=="*.png"){
-                  png(paste(dir,"/",i,"_mrMLM_Manhattan.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat1=="*.tiff"){
-                  tiff(paste(dir,"/",i,"_mrMLM_Manhattan.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat1=="*.jpeg"){
-                  jpeg(paste(dir,"/",i,"_mrMLM_Manhattan.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat1=="*.pdf"){
-                  pdf(paste(dir,"/",i,"_mrMLM_Manhattan.pdf",sep=""),width=10)
-                }
-                Plot(plotresult=remanMR,color1="red",color2="blue",0.95,method="mrMLM",type="Manhattan")
-                dev.off()
-                if(Plotformat2=="*.png"){
-                  png(paste(dir,"/",i,"_mrMLM_qq.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat2=="*.tiff"){
-                  tiff(paste(dir,"/",i,"_mrMLM_qq.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat2=="*.jpeg"){
-                  jpeg(paste(dir,"/",i,"_mrMLM_qq.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                }else if(Plotformat2=="*.pdf"){
-                  pdf(paste(dir,"/",i,"_mrMLM_qq.pdf",sep=""),width=10)
-                }
-                Plot(plotresult=reqqMR,color1="red",color2="blue",0.95,method="mrMLM",type="qq")
-                dev.off()
-              }
             }
           },silent=FALSE)  
           if ('try-error' %in% class(TRY1)|| !('try-error' %in% class(TRY1))){
@@ -1363,37 +1333,6 @@ mrMLM.GUI<-function(){
                 colnames(tr1)<-"Trait ID"
                 colnames(tr1na)<-"Trait name"
                 re1FMR<-cbind(tr1,tr1na,me1,as.matrix(outFMR$result1))
-                remanFMR<-outFMR$Manhattan
-                reqqFMR<- outFMR$QQ
-                if(DrawPlot==TRUE){
-                  if(Resolution=="Low"){
-                    manwidth<-960;manhei<-600;manwordre<-20;manfigurere<-72
-                  }else if(Resolution=="High"){
-                    manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-300
-                  }
-                  if(Plotformat1=="*.png"){
-                    png(paste(dir,"/",i,"_FASTmrMLM_Manhattan.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_FASTmrMLM_Manhattan.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_FASTmrMLM_Manhattan.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_FASTmrMLM_Manhattan.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=remanFMR,color1="red",color2="blue",0.95,method="FASTmrMLM",type="Manhattan")
-                  dev.off()
-                  if(Plotformat2=="*.png"){
-                    png(paste(dir,"/",i,"_FASTmrMLM_qq.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_FASTmrMLM_qq.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_FASTmrMLM_qq.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_FASTmrMLM_qq.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=reqqFMR,color1="red",color2="blue",0.95,method="FASTmrMLM",type="qq")
-                  dev.off()
-                }
               }
               
             },silent=FALSE)
@@ -1421,37 +1360,6 @@ mrMLM.GUI<-function(){
                 colnames(tr1)<-"Trait ID"
                 colnames(tr1na)<-"Trait name"
                 re1FME<-cbind(tr1,tr1na,me1,as.matrix(outFME$result1))
-                remanFME<-outFME$Manhattan
-                reqqFME<-outFME$QQ
-                if(DrawPlot==TRUE){
-                  if(Resolution=="Low"){
-                    manwidth<-960;manhei<-600;manwordre<-20;manfigurere<-72
-                  }else if(Resolution=="High"){
-                    manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-300
-                  }
-                  if(Plotformat1=="*.png"){
-                    png(paste(dir,"/",i,"_FASTmrEMMA_Manhattan.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_FASTmrEMMA_Manhattan.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_FASTmrEMMA_Manhattan.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_FASTmrEMMA_Manhattan.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=remanFME,color1="red",color2="blue",0.95,method="FASTmrEMMA",type="Manhattan")
-                  dev.off()
-                  if(Plotformat2=="*.png"){
-                    png(paste(dir,"/",i,"_FASTmrEMMA_qq.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_FASTmrEMMA_qq.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_FASTmrEMMA_qq.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_FASTmrEMMA_qq.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=reqqFME,color1="red",color2="blue",0.95,method="FASTmrEMMA",type="qq")
-                  dev.off()
-                }
               }
             },silent=FALSE)
             
@@ -1472,28 +1380,7 @@ mrMLM.GUI<-function(){
                   if(nrow(rePLA)>50){
                     rePLAQ<-screen(rePLA,InputData$doMR$genRaw,InputData$doMR$gen,InputData$doMR$phe,InputData$doMR$psmatrix)
                     rePLA<-rePLAQ[[1]]
-                    plotid<-rePLAQ[[2]] 
-                    loc_marker<-rbind(outPLA$plot[plotid,3:5],matrix("",nrow(outPLA$plot[,1:2])-length(plotid),3))
-                    replPLA<-cbind(outPLA$plot[,1:2], loc_marker)
                   }
-                }
-                if(DrawPlot==TRUE){
-                  if(Resolution=="Low"){
-                    manwidth<-960;manhei<-240;manwordre<-12;manfigurere<-72
-                  }else if(Resolution=="High"){
-                    manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-600
-                  }
-                  if(Plotformat1=="*.png"){
-                    png(paste(dir,"/",i,"_pLARmEB_LOD.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_pLARmEB_LOD.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_pLARmEB_LOD.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_pLARmEB_LOD.pdf",sep=""),width=12)
-                  }
-                  Plot(plotresult=replPLA,color1="red",color2="blue",0.95,method="pLARmEB",type="LOD")
-                  dev.off()
                 }
               }
             },silent=FALSE)
@@ -1522,37 +1409,6 @@ mrMLM.GUI<-function(){
                 colnames(tr1)<-"Trait ID"
                 colnames(tr1na)<-"Trait name"
                 re1PKW<-cbind(tr1,tr1na,me1,as.matrix(outPKW$result1))
-                remanPKW<-outPKW$Manhattan
-                reqqPKW<-outPKW$QQ
-                if(DrawPlot==TRUE){
-                  if(Resolution=="Low"){
-                    manwidth<-960;manhei<-600;manwordre<-20;manfigurere<-72
-                  }else if(Resolution=="High"){
-                    manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-300
-                  }
-                  if(Plotformat1=="*.png"){
-                    png(paste(dir,"/",i,"_pKWmEB_Manhattan.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_pKWmEB_Manhattan.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_pKWmEB_Manhattan.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_pKWmEB_Manhattan.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=remanPKW,color1="red",color2="blue",0.95,method="pKWmEB",type="Manhattan")
-                  dev.off()
-                  if(Plotformat2=="*.png"){
-                    png(paste(dir,"/",i,"_pKWmEB_qq.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_pKWmEB_qq.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_pKWmEB_qq.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat2=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_pKWmEB_qq.pdf",sep=""),width=10)
-                  }
-                  Plot(plotresult=reqqPKW,color1="red",color2="blue",0.95,method="pKWmEB",type="qq")
-                  dev.off()
-                }
               }
             },silent=FALSE)
           }
@@ -1572,66 +1428,111 @@ mrMLM.GUI<-function(){
                   if(nrow(reISIS)>50){
                     reISISQ<-screen(reISIS,InputData$doMR$genRaw,InputData$doMR$gen,InputData$doMR$phe,InputData$doMR$psmatrix)
                     reISIS<-reISISQ[[1]]
-                    plotid<-reISISQ[[2]]  
-                    loc_marker<-rbind(outISIS$plot[plotid,3:5],matrix("",nrow(outISIS$plot[,1:2])-length(plotid),3))
-                    replISIS<-cbind(outISIS$plot[,1:2], loc_marker)
                   }
-                }
-                if(DrawPlot==TRUE){
-                  if(Resolution=="Low"){
-                    manwidth<-960;manhei<-240;manwordre<-12;manfigurere<-72
-                  }else if(Resolution=="High"){
-                    manwidth<-10000;manhei<-6000;manwordre<-30;manfigurere<-600
-                  }
-                  if(Plotformat1=="*.png"){
-                    png(paste(dir,"/",i,"_ISIS EM-BLASSO_LOD.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.tiff"){
-                    tiff(paste(dir,"/",i,"_ISIS EM-BLASSO_LOD.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.jpeg"){
-                    jpeg(paste(dir,"/",i,"_ISIS EM-BLASSO_LOD.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
-                  }else if(Plotformat1=="*.pdf"){
-                    pdf(paste(dir,"/",i,"_ISIS EM-BLASSO_LOD.pdf",sep=""),width=12)
-                  }
-                  Plot(plotresult=replISIS,color1="red",color2="blue",0.95,method="ISIS EM-BLASSO",type="LOD")
-                  dev.off()
                 }
               }
             },silent=FALSE)
           }
           if ('try-error' %in% class(TRY6)|| !('try-error' %in% class(TRY6))){
             TRY7<-try({
-              output1<-list(re1MR,re1FMR,re1FME,re1PKW)
-              output1<-do.call(rbind,output1)
-              output<-list(reMR,reFMR,reFME,rePLA,rePKW,reISIS)
-              output<-do.call(rbind,output)
-              write.table(output,paste(dir,"/",i,"_Final result.csv",sep=""),sep=",",row.names=FALSE,col.names = T)
+              output1qq<-list(re1MR,re1FMR,re1FME,re1PKW)
+              output1q<-do.call(rbind,output1qq)
+              
+            if(isFALSE(all(lengths(output1qq)==0))){
+              eff<-numeric()
+              logp<-numeric()
+              for(bb in c(which(lengths(output1qq)!=0))){
+                eff_every<-as.matrix(output1qq[[bb]][,7])
+                colnames(eff_every)<-colnames(output1qq[[bb]])[7]
+                eff<-cbind(eff,eff_every)
+                  
+                logp_every<-as.matrix(output1qq[[bb]][,8])
+                colnames(logp_every)<-colnames(output1qq[[bb]])[8]
+                logp<-cbind(logp,logp_every)
+              }
+              gencode1<-as.matrix(output1qq[[which(lengths(output1qq)!=0)[1]]][,9])
+              colnames(gencode1)<-colnames(output1q)[[9]]
+              
+              output1<-cbind(output1qq[[which(lengths(output1qq)!=0)[1]]][,c(1,2,4,5,6)],eff,logp,gencode1)
+              if("SNP effect (pKWmEB)"%in%colnames(output1)){
+                output1<-output1[,-c(which(colnames(output1)%in%"SNP effect (pKWmEB)"))] 
+              }
+            }else{
+              output1<-output1q
+            }
               write.table(output1,paste(dir,"/",i,"_intermediate result.csv",sep=""),sep=",",row.names=FALSE,col.names = T)
-              plotresult<-list(remanMR,reqqMR,remanFMR,reqqFMR,remanFME,reqqFME,replPLA,remanPKW,reqqPKW,replISIS)
-              wb <- createWorkbook("Fred")
-              addWorksheet(wb, "Manhattan mrMLM")
-              addWorksheet(wb, "qq mrMLM")
-              addWorksheet(wb, "Manhattan FASTmrMLM")
-              addWorksheet(wb, "qq FASTmrMLM")
-              addWorksheet(wb, "Manhattan FASTmrEMMA")
-              addWorksheet(wb, "qq FASTmrEMMA")
-              addWorksheet(wb, "Plot pLARmEB")
-              addWorksheet(wb, "Manhattan pKWmEB")
-              addWorksheet(wb, "qq pKWmEB")
-              addWorksheet(wb, "Plot ISIS EM-BLASSO")
-              writeData(wb, sheet = "Manhattan mrMLM", plotresult[[1]])
-              writeData(wb, sheet = "qq mrMLM", plotresult[[2]])
-              writeData(wb, sheet = "Manhattan FASTmrMLM", plotresult[[3]])
-              writeData(wb, sheet = "qq FASTmrMLM", plotresult[[4]])
-              writeData(wb, sheet = "Manhattan FASTmrEMMA", plotresult[[5]])
-              writeData(wb, sheet = "qq FASTmrEMMA", plotresult[[6]])
-              writeData(wb, sheet = "Plot pLARmEB", plotresult[[7]])
-              writeData(wb, sheet = "Manhattan pKWmEB", plotresult[[8]])
-              writeData(wb, sheet = "qq pKWmEB", plotresult[[9]])
-              writeData(wb, sheet = "Plot ISIS EM-BLASSO", plotresult[[10]])
-              saveWorkbook(wb,paste(dir,"/",i,"_result for plot.csv",sep=""), overwrite = TRUE)
+               
             },silent=FALSE)
           }
           
+          if ('try-error' %in% class(TRY7)|| !('try-error' %in% class(TRY7))){
+            TRY8<-try({
+              
+              output<-list(reMR,reFMR,reFME,rePLA,rePKW,reISIS)
+              output<-do.call(rbind,output)
+              write.table(output,paste(dir,"/",i,"_Final result.csv",sep=""),sep=",",row.names=FALSE,col.names = T)
+               
+            },silent=FALSE)
+          }
+          
+          
+          
+          if ('try-error' %in% class(TRY8)|| !('try-error' %in% class(TRY8))){
+            TRY9<-try({
+              
+              if(DrawPlot==TRUE){
+                
+                
+              if(isFALSE(all(lengths(output1qq)==0))){
+                manwidth<-28000;manhei<-7000;manwordre<-60;manfigurere<-600 
+                qqwidth<-10000;qqhei<-10000;qqwordre<-60;qqfigurere<-600 
+                
+                if(Plotformat1=="*.png"){
+                  png(paste(dir,"/",i,"_Manhattan plot.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
+                  manhattan_mrMLM(data_in=as.matrix(output1q),data_fin=as.matrix(output),lodline=svmlod)
+                  dev.off()
+                  
+                  png(paste(dir,"/",i,"_qq plot.png",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+                  QQ_mrMLM(data_in=as.matrix(output1q))
+                  dev.off()
+                  
+                }else if(Plotformat1=="*.tiff"){
+                  tiff(paste(dir,"/",i,"_Manhattan plot.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
+                  manhattan_mrMLM(data_in=as.matrix(output1q),data_fin=as.matrix(output),lodline=svmlod)
+                  dev.off()
+                  
+                  tiff(paste(dir,"/",i,"_qq plot.tiff",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+                  QQ_mrMLM(data_in=as.matrix(output1q))
+                  dev.off()
+                  
+                }else if(Plotformat1=="*.jpeg"){
+                  jpeg(paste(dir,"/",i,"_Manhattan plot.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
+                  manhattan_mrMLM(data_in=as.matrix(output1q),data_fin=as.matrix(output),lodline=svmlod)
+                  dev.off()
+                  
+                  jpeg(paste(dir,"/",i,"_qq plot.jpeg",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+                  QQ_mrMLM(data_in=as.matrix(output1q))
+                  dev.off()
+                  
+                }else if(Plotformat1=="*.pdf"){
+                  pdf(paste(dir,"/",i,"_Manhattan plot.pdf",sep=""),width=16,height=4,pointsize = 20)
+                  manhattan_mrMLM(data_in=as.matrix(output1q),data_fin=as.matrix(output),CoorLwd=2,lodline=svmlod)
+                  dev.off()
+                  
+                  pdf(paste(dir,"/",i,"_qq plot.pdf",sep=""),pointsize = 25)
+                  QQ_mrMLM(data_in=as.matrix(output1q),CoorLwd=2)
+                  dev.off()
+                }
+              
+              }else{
+                showModal(modalDialog(title = "Warning", strong("Draw plot need intermediate result of mrMLM, FASTmrMLM, FASTmrEMMA or pKWmEB!"), easyClose = TRUE))
+              }   
+            } 
+              
+            },silent=FALSE)
+          }
+          
+           
           incProgress(1/(max(trait)-min(trait)+1), detail = paste("Doing part", i))
           Sys.sleep(0.1)
         }
@@ -1642,217 +1543,360 @@ mrMLM.GUI<-function(){
     output$result<-renderUI(MR())
     
     ####################Draw plot###############################################
-    plotfu<-reactive({
-      Plot2<-function(fileplot=NULL,color1=NULL,color2=NULL,CriValue=NULL,p_stand=NULL,method=NULL,type=NULL){
-        Manhattan<-function(fileplot,color1,color2,CriValue,method){
-          parms<-as.data.frame(read.xlsx(fileplot,sheet = paste("Manhattan ",method,sep="")))
-          mannewp<-as.numeric(parms[1,5])
-          updateTextInput(session, "mancrimr", value = sprintf("%.6s",-log10(mannewp)))
-          svgwline<-CriValue
-          standline<-svgwline
-          manhattan(parms,chr = "Chromosome",bp ="BPnumber",p ="P-value",snp="SNPname",col=c(color1,color2),suggestiveline=FALSE,genomewideline = standline)
+    
+    manIn<-reactive({
+      req(input$filemanIn)
+      data_in<-as.matrix(fread(input$filemanIn$datapath))
+    })
+    
+    manFin<-reactive({
+      req(input$filemanFin)
+      data_fin<-as.matrix(fread(input$filemanFin$datapath))
+    })
+    
+    
+    qqIn<-reactive({
+      req(input$fileqqmr)
+      data_in<-as.matrix(fread(input$fileqqmr$datapath))
+    })
+    
+    
+    mandraw<-eventReactive(input$drawman,{
+      
+      
+      id <- showNotification("Calculation in progress, please be patient...", duration = NULL,type="message")
+      
+      manhattan_mrMLM2<-function(data_in,data_fin,mar=c(2.9,2.8,0.7,2.8),VerLabDis=1.5,
+                                VerTckDis=0.4,label_size=0.8,CoorLwd=5,
+                                TckLen=-0.03,TckLwd=0.7,log_times=2,LOD_times=1.2){
+        
+        ###########Data process#################
+        ###########intermediate result
+        cona<-colnames(data_in)
+        logp_4method<-as.matrix(data_in[,which(substr(cona,1,10)=="'-log10(P)")])
+        logp_4method<-apply(logp_4method,2,as.numeric)
+        p_4method<-10^-logp_4method
+        p_median<-apply(p_4method,1,median)
+        locsub<-which(p_median==0)
+        pmin<-min(p_median[p_median!=0])
+        subvalue<-10^(1.1*log10(pmin))
+        p_median[locsub]<-subvalue
+        data_p<-as.matrix(p_median)
+        data_num<-as.matrix(seq(1:length(p_median)))
+        data_chr<-as.matrix(data_in[,4])
+        data_pos<-as.matrix(data_in[,5])
+        manresult<-cbind(data_chr,data_pos,data_p,data_num)
+        manresult<-apply(manresult,2,as.numeric)
+        colnames(manresult)<-c("Chromosome","BPnumber","P-value","SNPname")
+        manresult<-as.data.frame(manresult)
+        #######final result##################
+        data_fin_method<-unique(data_fin[,3])
+        data_fin_method_length<-1:length(unique(data_fin[,3]))
+        for(r in 1:length(unique(data_fin[,3]))){
+          data_fin[which(data_fin[,3]==data_fin_method[r]),3]<-r
         }
-        QQplot1<-function(fileplot,p_stand,color1,color2,method){
-          p_value<-as.matrix(read.xlsx(fileplot,sheet=paste("qq ",method,sep="")))
-          pvalue<-matrix(p_value,,1)
-          observed<-sort(pvalue[,1])
-          observed<-observed/2
-          observed<-observed[which(observed!=0)]
-          newobserved<-observed[which(observed<(p_stand/2))]
-          lobs<--(log10(newobserved))
-          expected<-c(1:length(newobserved))
-          lexp<--(log10(expected/(length(pvalue)+1)))
-          plot(lexp,lobs,xlim=c(0,max(lexp)),ylim=c(0,max(lobs)),xlab=expression('Expected -log'[10]*'(P)'),ylab=expression('Observed -log'[10]*'(P)'),col=color2)
-          abline(0,1,col=color1)
-        }
-        QQplot2<-function(fileplot,color1,color2,method){
-          ress1<-as.data.frame(read.xlsx(fileplot,sheet = paste("qq ",method,sep="")))
-          pvalue<-as.matrix(ress1)
-          ps<-pvalue[,1]
-          obs.x<-sort(ps)
-          newobs.x<-obs.x[obs.x<1]
-          n<-length(newobs.x)
-          es<-(1:n)/(n+1)
-          x<--log10(es)
-          y<--log10(newobs.x)
-          y<-y-0.3
-          plot(x,y,xlim=c(0.3,max(x)),ylim=c(0.3,max(y)),xlab=expression('Expected -log'[10]*'(P)'),ylab=expression('Observed -log'[10]*'(P)'),col=color2)
-          abline(0,1,col=color1)
-        }
-        LOD<-function(fileplot=NULL,color1,method=NULL){
-          data<-as.data.frame(read.xlsx(fileplot,sheet=paste("Plot ",method,sep=""),colNames=TRUE))
-          data<-sapply(data,as.numeric)
-          gen<-data[,1:2]
-          resulty<-data[,3:5]
-          resultk<-which(is.na(data)==TRUE,arr.ind = TRUE)
-          resultq<-resulty[1:(resultk[1]-1),] 
-          if(nrow(resultq)>1){
-            result<-resultq
-          }else{
-            result<-t(as.matrix(resultq))
-          }
-          galaxyy<-as.matrix(result)
-          chr_pos <- gen[,1:2]
-          chr_num <- length(unique(chr_pos[,1]))
-          chr <- matrix(0,chr_num,1)
-          pos <- matrix(0,chr_num,1)
-          for(i in 1:chr_num)
-          {
-            temp <- numeric()
-            temp <- length(which(chr_pos[,1]==i))
-            if(i==1)
-            {
-              pos[i] <- temp
-              chr[i] <- chr_pos[pos[i],2]
-            }else{
-              pos[i] <- pos[i-1] + temp
-              chr[i] <- chr_pos[pos[i],2]
+        data_fin_mark<-matrix(data_fin[,c(5,6,8,3)],,4)
+        data_fin_mark<-matrix(apply(data_fin_mark,2,as.numeric),,4)
+        data_fin_mark_chr<-matrix(data_fin_mark[order(data_fin_mark[,1]),],,4)
+        data_fin_mark_order<-numeric()
+        for(i in c(unique(data_fin_mark_chr[,1]))){
+          data_fin_mark_erery_chr<-matrix(data_fin_mark_chr[which(data_fin_mark_chr[,1]==i),],,4)
+          data_fin_mark_pos<-matrix(data_fin_mark_erery_chr[order(data_fin_mark_erery_chr[,2]),],,4)
+          all_pos<-unique(data_fin_mark_pos[,2])
+          all_pos_maxlod<-numeric()
+          for(ii in 1:length(all_pos)){
+            all_pos_every<-matrix(data_fin_mark_pos[which(data_fin_mark_pos[,2]==all_pos[ii]),],,4)
+            lod_me<-median(all_pos_every[,3])
+            all_pos_every_median<-c(all_pos_every[1,1:2],lod_me,all_pos_every[1,4])
+            if(nrow(all_pos_every)>=2){
+              all_pos_every_median<-c(all_pos_every[1,1:2],lod_me,max(data_fin_mark[,4])+1)
             }
+            all_pos_maxlod<-rbind(all_pos_maxlod,all_pos_every_median)
           }
-          pos_acc <- matrix(0,chr_num,1)
-          for(i in 1:chr_num)
-          {
-            if(i==1){
-              pos_acc[i] <- chr[i]
-            }else{
-              pos_acc[i] <- pos_acc[i-1] + chr[i]
-            }
-          }
-          newres_pos <- galaxyy[,2]
-          res_sumpos <- pos_acc[galaxyy[which(galaxyy[,1]>1),1]-1] + galaxyy[which(galaxyy[,1]>1),2] 
-          newres_pos[which(galaxyy[,1]>1)] <- res_sumpos 
-          pospic<-c(newres_pos)
-          lodpic<-c(galaxyy[,3])  
-          mm<-round(max(pospic)/4000)
-          mm<-as.numeric(format(mm,digits = 1,scientific = TRUE))
-          pospicx<-pospic/mm
-          if(pospicx[1]<20){
-            pospicx[1]<-pospicx[1]+20
-          }
-          pos_acc1<-pos_acc/mm
-          resdf1 <- data.frame(pospicx,lodpic)
-          pp <- ggplot(data=resdf1, aes(x=pospicx, y=lodpic)) +
-            geom_bar(stat="identity", width=0.5, fill="white", linetype="solid",color=color1)
-          
-          pp <- pp + geom_vline(xintercept=c(0,pos_acc1),linetype="dashed",alpha=0.2)
-          pp <- pp  + scale_x_continuous(expand=c(0,0),limits=c(0,(pos_acc1[dim(pos_acc1)[1]]+100))) +
-            scale_y_continuous(expand=c(0,0))
-          pp <- pp + xlab(paste("Genome position (",mm,"bp)",sep = "")) + ylab("LOD score") + ggtitle("") + theme_classic()
-          pp <- pp + theme(axis.title.y = element_text( vjust = 2,hjust=0.5,size = 14),
-                           axis.title.x = element_text(vjust = -0.5,hjust=0.5,size = 14))
-          pp <- pp + theme(panel.background = element_rect(fill = "white"))
-          pp <- pp + theme(text=element_text(family="mono"))
-          pp <- pp + theme(axis.line.y = element_line(colour = "black", linetype = "solid"),
-                           axis.line.x = element_line(colour = "black", linetype = "solid"))
-          print(pp)
+          data_fin_mark_order<-rbind(data_fin_mark_order,all_pos_maxlod)
         }
-        if(type=="Manhattan"){
-          Manhattan(fileplot,color1,color2,CriValue,method)
-        }else if(type=="qq"){
-          if(method=="FASTmrEMMA"){
-            QQplot2(fileplot,color1,color2,method)  
-          }else{
-            QQplot1(fileplot,p_stand,color1,color2,method) 
+        snpOfInterest<-numeric()
+        for(i in c(unique(data_fin_mark_order[,1]))){
+          manresult_chr<-manresult[which(manresult[,1]==i),]
+          data_fin_mark_order_chr<-matrix(data_fin_mark_order[which(data_fin_mark_order[,1]==i),],,4)
+          mark_loc<-manresult_chr[which(manresult_chr[,2]%in%data_fin_mark_order_chr[,2]),4]
+          snpOfInterest<-c(snpOfInterest,mark_loc) 
+        }
+        bpnumber <- numeric()
+        chrnum <- unique(manresult[,1])
+        for(i in 1:length(chrnum))
+        {
+          bpnumber <- rbind(bpnumber,as.matrix(c(1:length(which(manresult[,1]==chrnum[i])))))
+        }
+        manresult2<-cbind(manresult[,1],bpnumber,manresult[,3:4])
+        colnames(manresult2)<-c("Chromosome","BPnumber","P-value","SNPname")
+        ##########prepare for data#############################
+        x<-manresult2;col=c("lightgreen","lightskyblue");logp=TRUE
+        chr = "Chromosome";bp ="BPnumber";p ="P-value";snp="SNPname";
+        highlight<-snpOfInterest
+        CHR=BP=P=index=NULL
+        d=data.frame(CHR=x[[chr]], BP=x[[bp]], P=x[[p]])
+        if (!is.null(x[[snp]])) d=transform(d, SNP=x[[snp]])
+        d <- subset(d, (is.numeric(CHR) & is.numeric(BP) & is.numeric(P)))
+        d <- d[order(d$CHR, d$BP), ]
+        if (logp) {
+          d$logp <- -log10(d$P)
+        } else {
+          d$logp <- d$P
+        }
+        d$pos=NA
+        d$index=NA
+        ind = 0
+        for (i in unique(d$CHR)){
+          ind = ind + 1
+          d[d$CHR==i,]$index = ind
+        }
+        
+        nchr = length(unique(d$CHR))
+        if (nchr==1) { ## For a single chromosome
+          ## Uncomment the next two linex to plot single chr results in Mb
+          #options(scipen=999)
+          #d$pos=d$BP/1e6
+          d$pos=d$BP
+          ticks=floor(length(d$pos))/2+1
+          xlabel = paste('Chromosome',unique(d$CHR),'position')
+          labs = ticks
+        } else { ## For multiple chromosomes
+          lastbase=0
+          ticks=NULL
+          for (i in unique(d$index)) {
+            if (i==1) {
+              d[d$index==i, ]$pos=d[d$index==i, ]$BP
+            } else {
+              lastbase=lastbase+tail(subset(d,index==i-1)$BP, 1)
+              d[d$index==i, ]$pos=d[d$index==i, ]$BP+lastbase
+            }
+            # Old way: assumes SNPs evenly distributed
+            # ticks=c(ticks, d[d$index==i, ]$pos[floor(length(d[d$index==i, ]$pos)/2)+1])
+            # New way: doesn't make that assumption
+            ticks = c(ticks, (min(d[d$index == i,]$pos) + max(d[d$index == i,]$pos))/2 + 1)
           }
-        }else if(type=="LOD"){
-          LOD(fileplot,color1,method)
+          xlabel = 'Chromosomes'
+          #labs = append(unique(d$CHR),'') ## I forgot what this was here for... if seems to work, remove.
+          labs <- unique(d$CHR)
+        }
+        
+        xmax = ceiling(max(d$pos) * 1.03)
+        xmin = floor(max(d$pos) * -0.03)
+        
+        ########draw plot#######################
+        
+        par(mar=mar)
+        def_args <- list(xaxt='n',yaxt="n",bty='n', xaxs='i', yaxs='i', las=1, pch=20,
+                         xlim=c(xmin,xmax), ylim=c(0,log_times*max(d$logp)),
+                         xlab=xlabel,ylab="",mgp=c(VerLabDis,0,0),cex.lab=label_size)
+        
+        dotargs <- list(NULL)
+        do.call("plot", c(NA, dotargs, def_args[!names(def_args) %in% names(dotargs)]))
+        axis(1, at=ticks, labels=labs,lwd=CoorLwd,tck=TckLen,mgp=c(VerLabDis+1,VerTckDis-0.2,0.5),cex.axis=TckLwd)
+        
+        suppressWarnings(axis(2, at=seq(0,log_times*max(d$logp),ceiling(log_times*max(d$logp)/5)),lwd=CoorLwd,tck=TckLen,mgp=c(2.2,VerTckDis,0),cex.axis=TckLwd))
+        mtext(expression(-log[10]('P-value')),side=2,line=VerLabDis,cex=label_size,font=1)
+        
+        # Create a vector of alternatiting colors
+        col=rep(col, max(d$CHR))
+        # Add points to the plot
+        if (nchr==1) {
+          with(d, points(pos, logp, pch=20, col=col[1]))
+        } else {
+          # if multiple chromosomes, need to alternate colors and increase the color index (icol) each chr.
+          icol=1
+          for (i in unique(d$index)) {
+            with(d[d$index==unique(d$index)[i], ], points(pos, logp, col=col[icol], pch=20))
+            icol=icol+1
+          }
+        }
+        d.highlight=d[which(d$SNP %in% highlight), ]
+        highlight_LOD<-as.numeric(data_fin_mark_order[,3])
+        d.highlight<-as.data.frame(cbind(d.highlight,highlight_LOD))
+        
+        ################################
+        par(new=T)
+        
+        def_args <- list(xaxt='n', yaxt='n',bty='n', xaxs='i', yaxs='i', las=1, pch=20,
+                         xlim=c(xmin,xmax), ylim=c(0,LOD_times*max(highlight_LOD)),xlab="",ylab="")
+        dotargs <- list(NULL)
+        do.call("plot", c(NA, dotargs, def_args[!names(def_args) %in% names(dotargs)]))
+        suppressWarnings(axis(4,mgp=c(1.4,VerTckDis,0),at=seq(0,LOD_times*max(highlight_LOD),ceiling(LOD_times*max(highlight_LOD)/5)),col="magenta",col.ticks="magenta",col.axis="magenta",lwd=CoorLwd,tck=TckLen,cex.axis=TckLwd))
+        mtext("LOD score",side=4,line=VerLabDis,cex=label_size,font=1,col="magenta")
+        abline(h=3,col="gray25",lty=2,lwd=2)
+        peach_colors<-c("magenta","deepskyblue2")
+        col_pos<-list(NULL)
+        method_num<-sort(unique(data_fin_mark_order[,4]))
+        
+        if(max(unique(data_fin[,3]))<max(unique(data_fin_mark_order[,4]))){
+          col_pos[[1]]<-which(data_fin_mark_order[,4]==max(method_num))
+          col_pos[[2]]<-which(data_fin_mark_order[,4]!=max(method_num))
+        }else{
+          if(length(unique(data_fin[,3]))==1){
+            col_pos[[1]]<-which(data_fin_mark_order[,4]==max(method_num))
+          }else{
+            col_pos[[1]]<-1:nrow(data_fin_mark_order)
+            
+          }
+        }
+        if(length(col_pos)>1&&length(col_pos[[2]])!=0){
+          with(d.highlight, points(pos[col_pos[[2]]], highlight_LOD[col_pos[[2]]], col=peach_colors[2], pch=20))
+          with(d.highlight, points(pos[col_pos[[2]]], highlight_LOD[col_pos[[2]]], col=peach_colors[2], pch=20,type="h",lty=2))
+          with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20))
+          with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20,type="h",lty=2))
+        }else{
+          with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20))
+          with(d.highlight, points(pos[col_pos[[1]]], highlight_LOD[col_pos[[1]]], col=peach_colors[1], pch=20,type="h",lty=2))
+        }
+        
+      }
+      
+      dirplot<-input$Saveplot
+      
+      manwidth<-input$manwidthmr;manhei<-input$manheimr;
+      manwordre<-input$manwordremr;manfigurere<-input$manfigureremr
+      
+      VerLabDis<-as.numeric(input$VerLabDis);VerTckDis<-as.numeric(input$VerTckDis)
+      label_size<-as.numeric(input$labelsize);CoorLwd<-as.numeric(input$CoorLwd)
+      TckLen<-as.numeric(input$TckLen);TckLwd<-as.numeric(input$TckLwd)
+      log_times<-as.numeric(input$logtimes);LOD_times<-as.numeric(input$LODtimes)
+      
+      if(input$markgene==TRUE){
+        
+        if(length(grep(",",input$posX))!=0&length(grep(",",input$posY))!=0&length(grep(",",input$Genename))!=0){
+        pos_x<-as.numeric(unlist(strsplit(input$posX,",")))
+        pos_y<-as.numeric(unlist(strsplit(input$posY,",")))
+        Genename<-as.character(unlist(strsplit(input$Genename,","))) 
+        pos_xx<-c(pos_x)
+        pos_yy<-c(pos_y)
+        GeneName<-c(Genename)
+        }else{
+        pos_xx<-as.numeric(input$posX)
+        pos_yy<-as.numeric(input$posY)
+        GeneName<-as.character(input$Genename)  
         }
       }
-    })
-    
-    output$mplmr<-renderPlot({
-      plotfunction<-plotfu()
-      req(input$filemanmr)
-      plotfunction(fileplot=input$filemanmr$datapath,color1=input$manchcolour1mr,color2=input$manchcolour2mr,CriValue=as.numeric(input$mancrimr),p_stand=NULL,method=input$plotmethodman,type="Manhattan")
       
-    })
-    
-    
-    output$qplmr<-renderPlot({
-      plotfunction<-plotfu()
-      req(input$fileqqmr)
-      plotfunction(fileplot=input$fileqqmr$datapath,color1=input$qqchcolour1mr,color2=input$qqchcolour2mr,CriValue=NULL,p_stand=0.95,method=input$plotmethodqq,type="qq")
-      
-    })
-    
-    
-    output$qplPLA<-renderPlot({
-      plotfunction<-plotfu()
-      req(input$fileppPLA)
-      plotfunction(fileplot=input$fileppPLA$datapath,color1=input$ppchcolour1PLA,color2=NULL,CriValue=NULL,p_stand=NULL,method=input$plotmethodlod,type="LOD")
-      
-    })
-    
-    output$downloadmanplot <- downloadHandler(
-      filename = function() {
-        paste("Manhattan", sep = ".", switch(
-          input$plmanformat, "*.png"=".png", "*.tiff"=".tiff", "*.jpeg"=".jpeg","*.pdf"=".pdf"
-        ))
-      },
-      content = function(file) {
-        plotfunction<-plotfu()
-        req(input$filemanmr)
-        if(input$plmanformat=="*.png"){
-          png(file,width=as.numeric(input$manwidthmr), height=as.numeric(input$manheimr), units= "px", pointsize =as.numeric(input$manwordremr),res=as.numeric(input$manfigureremr))
-        }else if(input$plmanformat=="*.tiff"){
-          tiff(file,width=as.numeric(input$manwidthmr), height=as.numeric(input$manheimr), units= "px", pointsize =as.numeric(input$manwordremr),res=as.numeric(input$manfigureremr))
-        }else if(input$plmanformat=="*.jpeg"){
-          jpeg(file,width=as.numeric(input$manwidthmr), height=as.numeric(input$manheimr), units= "px", pointsize =as.numeric(input$manwordremr),res=as.numeric(input$manfigureremr))
-        }else if(input$plmanformat=="*.pdf"){
-          pdf(file,width=10)
-        }
-        plotfunction(fileplot=input$filemanmr$datapath,color1=input$manchcolour1mr,color2=input$manchcolour2mr,CriValue=as.numeric(input$mancrimr),p_stand=NULL,method=input$plotmethodman,type="Manhattan")
+      if(input$plmanformat=="*.png"){
+        png(paste(dirplot,"/","Manhattan plot.png",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
+        manhattan_mrMLM2(data_in=manIn(),data_fin=manFin(),mar=c(2.9,2.8,0.7,2.8),
+                        VerLabDis,VerTckDis,label_size,CoorLwd,
+                        TckLen,TckLwd,log_times,LOD_times)
+        if(input$markgene==TRUE){
+          text(c(pos_xx),c(pos_yy),c(GeneName),font=3,cex=label_size-0.3,col=input$colorname)
+         }
         dev.off()
-      })
-    
-    
-    output$downloadqqplot <- downloadHandler(
-      filename = function() {
-        paste("QQ", sep = ".", switch(
-          input$plqqformat, "*.png"=".png", "*.tiff"=".tiff", "*.jpeg"=".jpeg","*.pdf"=".pdf"
-        ))
-      },
-      content = function(file) {
-        plotfunction<-plotfu()
-        req(input$fileqqmr)
-        if(input$plqqformat=="*.png"){
-          png(file,width=as.numeric(input$qqwidthmr), height=as.numeric(input$qqheimr), units= "px", pointsize =as.numeric(input$qqwordremr),res=as.numeric(input$qqfigureremr))
-        }else if(input$plqqformat=="*.tiff"){
-          tiff(file,width=as.numeric(input$qqwidthmr), height=as.numeric(input$qqheimr), units= "px", pointsize =as.numeric(input$qqwordremr),res=as.numeric(input$qqfigureremr))
-        }else if(input$plqqformat=="*.jpeg"){
-          jpeg(file,width=as.numeric(input$qqwidthmr), height=as.numeric(input$qqheimr), units= "px", pointsize =as.numeric(input$qqwordremr),res=as.numeric(input$qqfigureremr))
-        }else if(input$plqqformat=="*.pdf"){
-          pdf(file,width=10)
-        }
+      }else if(input$plmanformat=="*.tiff"){
+        tiff(paste(dirplot,"/","Manhattan plot.tiff",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
         
-        plotfunction(fileplot=input$fileqqmr$datapath,color1=input$qqchcolour1mr,color2=input$qqchcolour2mr,CriValue=NULL,p_stand=0.95,method=input$plotmethodqq,type="qq")
-        
-        dev.off()
-      })
-    
-    
-    
-    output$downloadppplotPLA <- downloadHandler(
-      filename = function() {
-        paste("LOD", sep = ".", switch(
-          input$plppformatPLA, "*.png"=".png", "*.tiff"=".tiff", "*.jpeg"=".jpeg","*.pdf"=".pdf"
-        ))
-      },
-      content = function(file) {
-        plotfunction<-plotfu()
-        req(input$fileppPLA)
-        if(input$plppformatPLA=="*.png"){
-          png(file,width=as.numeric(input$ppwidthPLA), height=as.numeric(input$ppheiPLA), units= "px", pointsize =as.numeric(input$ppwordrePLA),res=as.numeric(input$ppfigurerePLA))
-        }else if(input$plppformatPLA=="*.tiff"){
-          tiff(file,width=as.numeric(input$ppwidthPLA), height=as.numeric(input$ppheiPLA), units= "px", pointsize =as.numeric(input$ppwordrePLA),res=as.numeric(input$ppfigurerePLA))
-        }else if(input$plppformatPLA=="*.jpeg"){
-          jpeg(file,width=as.numeric(input$ppwidthPLA), height=as.numeric(input$ppheiPLA), units= "px", pointsize =as.numeric(input$ppwordrePLA),res=as.numeric(input$ppfigurerePLA))
-        }else if(input$plppformatPLA=="*.pdf"){
-          pdf(file,width=10)
+        manhattan_mrMLM2(data_in=manIn(),data_fin=manFin(),mar=c(2.9,2.8,0.7,2.8),
+                        VerLabDis,VerTckDis,label_size,CoorLwd,
+                        TckLen,TckLwd,log_times,LOD_times)
+        if(input$markgene==TRUE){
+          text(c(pos_xx),c(pos_yy),c(GeneName),font=3,cex=label_size-0.3,col=input$colorname)
         }
-        plotfunction(fileplot=input$fileppPLA$datapath,color1=input$ppchcolour1PLA,color2=NULL,CriValue=NULL,p_stand=NULL,method=input$plotmethodlod,type="LOD")
         dev.off()
-      })
+        
+      }else if(input$plmanformat=="*.jpeg"){
+        jpeg(paste(dirplot,"/","Manhattan plot.jpeg",sep=""),width=as.numeric(manwidth), height=as.numeric(manhei), units= "px", pointsize =as.numeric(manwordre),res=as.numeric(manfigurere))
+        
+        manhattan_mrMLM2(data_in=manIn(),data_fin=manFin(),mar=c(2.9,2.8,0.7,2.8),
+                        VerLabDis,VerTckDis,label_size,CoorLwd,
+                        TckLen,TckLwd,log_times,LOD_times)
+        if(input$markgene==TRUE){
+          text(c(pos_xx),c(pos_yy),c(GeneName),font=3,cex=label_size-0.3,col=input$colorname)
+        }
+        dev.off()
+        
+      }else if(input$plmanformat=="*.pdf"){
+        pdf(paste(dirplot,"/","Manhattan plot.pdf",sep=""),width=as.numeric(input$manwidthpdf),height=as.numeric(input$manheipdf),pointsize=as.numeric(input$manpoipdf))
+        
+        manhattan_mrMLM2(data_in=manIn(),data_fin=manFin(),mar=c(2.9,2.8,0.7,2.8),
+                        VerLabDis,VerTckDis,label_size,CoorLwd,
+                        TckLen,TckLwd,log_times,LOD_times)
+        if(input$markgene==TRUE){
+          text(c(pos_xx),c(pos_yy),c(GeneName),font=3,cex=label_size-0.3,col=input$colorname)
+        }
+        dev.off()
+      }
+      
+      removeNotification(id)   
+      
+    })
+    
+    
+    
+    qqdraw<-eventReactive(input$drawqq,{
+      
+      id2 <- showNotification("Calculation in progress, please be patient...", duration = NULL,type="message")
+      
+      dirqq<-input$Saveplotqq
+      
+      QQ_mrMLM<-function(data_in,mar=c(2.5,2.5,1,1),label_size=0.7,TckLen=-0.02,
+                         CoorLwd=3,TckLwd=0.6,HorLabDis=1,HorTckDis=0.02,VerLabDis=1.1,
+                         VerTckDis=0.3,P_stand=0.9){
+        
+        cona<-colnames(data_in)
+        logp_4method<-as.matrix(data_in[,which(substr(cona,1,10)=="'-log10(P)")])
+        logp_4method<-apply(logp_4method,2,as.numeric)
+        p_4method<-10^-logp_4method
+        p_median<-apply(p_4method,1,median)
+        locsub<-which(p_median==0)
+        pmin<-min(p_median[p_median!=0])
+        subvalue<-10^(1.1*log10(pmin))
+        p_median[locsub]<-subvalue
+        data_p<-as.matrix(p_median)
+        p_value<-data_p
+        pvalue<-matrix(p_value,,1)
+        observed<-sort(pvalue[,1])
+        observed<-observed/2
+        observed<-observed[which(observed!=0)]
+        newobserved<-observed[which(observed<(0.9/2))]
+        lobs<--(log10(newobserved))
+        expected<-c(1:length(newobserved))
+        lexp<--(log10(expected/(length(pvalue)+1)))
+        par(mar=mar)
+        suppressWarnings(plot(lexp,lobs,xlim=c(0,max(lexp)),ylim=c(0,max(lobs)),xlab=expression('Expected -log'[10]*'(P-value)'),
+                              yaxt="n",ylab="",col="blue",pch=20,cex.lab=label_size,tck=TckLen,bty="l",lwd=CoorLwd,
+                              lwd.ticks=CoorLwd,cex.axis=TckLwd,mgp=c(HorLabDis,HorTckDis,0)))
+        suppressWarnings(axis(2, at=seq(0,max(lobs)),lwd=CoorLwd,tck=TckLen,mgp=c(2.2,VerTckDis,0),cex.axis=TckLwd))
+        mtext(expression('Observed -log'[10]*'(P-value)'),side=2,line=VerLabDis,cex=label_size,font=1)
+        abline(0,1,col="red")
+        box(bty="l",lwd=CoorLwd)
+      }
+      qqwidth<-input$qqwidthmr;qqhei<-input$qqheimr;qqwordre<-input$qqwordremr;qqfigurere<-input$qqfigureremr
+      
+      VerLabDis<-as.numeric(input$VerLabDisqq);HorLabDis<-as.numeric(input$HorLabDisqq)
+      HorTckDis<-as.numeric(input$HorTckDisqq);VerTckDis<-as.numeric(input$VerTckDisqq)
+      label_size<-as.numeric(input$labelsizeqq);CoorLwd<-as.numeric(input$CoorLwdqq)
+      TckLen<-as.numeric(input$TckLenqq);TckLwd<-as.numeric(input$TckLwdqq)
+      P_stand<-as.numeric(input$pstand);
+      
+      if(input$plqqformat=="*.png"){
+        png(paste(dirqq,"/","qq plot.png",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+        QQ_mrMLM(data_in=qqIn(),mar=c(2.5,2.5,1,1),label_size,TckLen,CoorLwd,TckLwd,HorLabDis,HorTckDis,VerLabDis,VerTckDis,P_stand)
+        dev.off()
+      }else if(input$plqqformat=="*.tiff"){
+        tiff(paste(dirqq,"/","qq plot.tiff",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+        QQ_mrMLM(data_in=qqIn(),mar=c(2.5,2.5,1,1),label_size,TckLen,CoorLwd,TckLwd,HorLabDis,HorTckDis,VerLabDis,VerTckDis,P_stand)
+        dev.off()
+      }else if(input$plqqformat=="*.jpeg"){
+        jpeg(paste(dirqq,"/","qq plot.jpeg",sep=""),width=as.numeric(qqwidth), height=as.numeric(qqhei), units= "px", pointsize =as.numeric(qqwordre),res=as.numeric(qqfigurere))
+        QQ_mrMLM(data_in=qqIn(),mar=c(2.5,2.5,1,1),label_size,TckLen,CoorLwd,TckLwd,HorLabDis,HorTckDis,VerLabDis,VerTckDis,P_stand)
+        dev.off()
+      }else if(input$plqqformat=="*.pdf"){
+        pdf(paste(dirqq,"/","qq plot.pdf",sep=""),width=as.numeric(input$qqwidthpdf),height=as.numeric(input$qqheipdf),pointsize=as.numeric(input$qqpoipdf))
+        QQ_mrMLM(data_in=qqIn(),mar=c(2.5,2.5,1,1),label_size,TckLen,CoorLwd,TckLwd,HorLabDis,HorTckDis,VerLabDis,VerTckDis,P_stand)
+        dev.off()
+      }
+      
+      removeNotification(id2)
+    })
+    
+    output$manout<-renderPlot(mandraw())
+    output$qqout<-renderPlot(qqdraw())
+ 
   })
   
   ui<-(
