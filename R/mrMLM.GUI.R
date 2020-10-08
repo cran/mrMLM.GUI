@@ -42,7 +42,7 @@ mrMLM.GUI<-function(){
                         
                         h4("Maintainer: Zhang Yuan-Ming (soyzhang at mail.hzau.edu.cn)"), 
                         
-                        h4("mrMLM.GUI version 4.0.1, Realeased September 2020"),
+                        h4("mrMLM.GUI version 4.0.2, Realeased October 2020"),
                         
                         offset=1)
                  

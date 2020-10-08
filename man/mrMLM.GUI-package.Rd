@@ -12,8 +12,8 @@ Description: Conduct multi-locus genome-wide association study under the framewo
 \tabular{ll}{
 Package: \tab mrMLM.GUI\cr
 Type: \tab Package\cr
-Version: \tab 4.0.1\cr
-Date: \tab 2020-9-29\cr
+Version: \tab 4.0.2\cr
+Date: \tab 2020-10-8\cr
 Depends: \tab shiny,lars\cr
 Imports: \tab methods,foreach,ncvreg,coin,sampling,data.table,doParallel,shinyjs,bigmemory,mrMLM\cr
 License: \tab GPL version 2 or newer\cr

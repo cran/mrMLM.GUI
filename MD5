@@ -1,10 +1,10 @@
-fc93f040f8df426a0b1ff06b776d4d8d *DESCRIPTION
+d663892a7f73d1c040719416251052ee *DESCRIPTION
 e3781ba4ee326ec5380e30f3318f7ddc *NAMESPACE
 11bf41e6d7ec6e30168b1794a3399637 *R/FASTmrEMMA.R
 bc5c9231c3ab2c725245c1c47e0c3102 *R/FASTmrMLM.R
 dc742acf003c7618399f7e884ad2d5a6 *R/ISIS.R
-bfd96840cb8073f348c9344d6219e295 *R/RcppExports.R
-0a321abc0536b2f6b75c46e75ec47b86 *R/mrMLM.GUI.R
+f4ef42a8fb4bfafd579035e502252cac *R/RcppExports.R
+ea47030d4ba13a022830297efddd8bac *R/mrMLM.GUI.R
 d8306e86f2dc42dbf27d9f7e5f66d134 *R/mrMLMFun.R
 5e5b192847a1bf6c81e05f12356d6108 *R/pKWmEB.R
 febf45d6a22bc68553d1b9bdac3f4ad9 *R/pLARmEB.R
@@ -13,7 +13,7 @@ abef81da5d10928bee5d1b9b93af0ca9 *data/fmegenraw.rda
 5b4e1ea0a907cf7edf7545a64d5c89bd *data/mrgen.rda
 5ea77aa9057c20f2a84d58e40c7678ef *data/mrgenraw.rda
 9f19cd8851ea4023ea5a93705f70b4c8 *data/mrphe.rda
-049dc802627816dbb46d2721309c6261 *inst/doc/Instruction.pdf
+a70ecd64dc8d70ea84c13697424cee24 *inst/doc/Instruction.pdf
 be97d59e31997885bb593eb6bc1bccfc *inst/extdata/Genotype_Cha.csv
 69b0093a20a03695736161076facfc13 *inst/extdata/Genotype_Hmp.txt
 088d479eae80e2b87ccb8f74fa3f3185 *inst/extdata/Genotype_Num.csv
@@ -27,7 +27,7 @@ f57125ac619f0543dd4b77f21c247122 *man/FASTmrMLM.Rd
 af88e402706aaf8deaef4ad26e864925 *man/ISIS.Rd
 615ffc7292ae80bbab6e92c982445890 *man/fmegen.Rd
 b048bf500af0a43834aae86a5791bc9c *man/fmegenraw.Rd
-c9e0e8e1fd8d46ba10d582b6b4293eba *man/mrMLM.GUI-package.Rd
+cf2ee71328f3d9292935946b63658531 *man/mrMLM.GUI-package.Rd
 8e6205507e6d3f507017d26fd323eeda *man/mrMLMFun.Rd
 68ba67d2c87a6351a3ec749e87477852 *man/mrgen.Rd
 bba23701715a96a87641491d700b03f3 *man/mrgenraw.Rd
@@ -35,5 +35,5 @@ cf768a0467ff89fef1eb7b3f5da54374 *man/mrphe.Rd
 4d7bfbd58420d5729298e04297aed869 *man/multiplication_speed.Rd
 5674c40e09bba4460b7c213baf86c575 *man/pKWmEB.Rd
 d09d472f40f87be3461ac7f5d574fcd8 *man/pLARmEB.Rd
-42ea412276352950213dfbe1dc480b4d *src/RcppExports.cpp
-585aa942b02fbd52016fae4a52459cf8 *src/multiplication_speed.cpp
+06a55c53b8d4d248ea7acb6e8b189ad6 *src/RcppExports.cpp
+43da9e308f48d7464758af8268f0e49d *src/multiplication_speed.cpp
